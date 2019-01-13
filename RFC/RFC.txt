@@ -1,0 +1,672 @@
+ 
+
+
+
+RFC-soumission                                          Bredariol Romain
+                                                      Poussard Sebastien
+Statut: soumis a correction                                         STRI
+                                                              13/01/2019
+
+
+                  Service de Partage de Fichier (SPF)
+
+
+Resume
+
+   Ce document presente le protocole de communication pour la mise en
+   place d'un client/serveur permettant le partage de fichiers dans le
+   cadre du projet de language C de STRI 2018/2019
+
+
+
+
+
+Table of Contents
+
+   1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . .  3
+   2 Terminologie . . . . . . . . . . . . . . . . . . . . . . . . . .  3
+   3 Logique  . . . . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     3.1 requetes et reponses . . . . . . . . . . . . . . . . . . . .  3
+     3.2 erreurs  . . . . . . . . . . . . . . . . . . . . . . . . . .  4
+     3.3 donnees  . . . . . . . . . . . . . . . . . . . . . . . . . .  4
+   4 Message echanges . . . . . . . . . . . . . . . . . . . . . . . .  4
+     4.1 Erreurs generales  . . . . . . . . . . . . . . . . . . . . .  4
+     4.2 Etablissement de connexion . . . . . . . . . . . . . . . . .  4
+     4.3 Identification . . . . . . . . . . . . . . . . . . . . . . .  5
+     4.4 Inscription  . . . . . . . . . . . . . . . . . . . . . . . .  5
+     4.5 Televerser un fichier  . . . . . . . . . . . . . . . . . . .  6
+     4.6 Authoriser un utilisateur a telecharger un fichier . . . . .  7
+     4.7 Enlever un utilisateurs de la liste des authorises a
+         telecharger un fichier . . . . . . . . . . . . . . . . . . .  7
+     4.8 Etat de l'espace de stockage . . . . . . . . . . . . . . . .  8
+     4.9 Renommer un fichier televerse  . . . . . . . . . . . . . . .  9
+     4.10 Supprimer un fichier  . . . . . . . . . . . . . . . . . . .  9
+     4.11 Liste des fichiers des autres utilisateurs telechargeale 
+          depuis le compte  . . . . . . . . . . . . . . . . . . . . . 10
+     4.12 Telecharger un fichier  . . . . . . . . . . . . . . . . . . 10
+     4.13 Suppression de compte . . . . . . . . . . . . . . . . . . . 11
+   5 Examples d'echanges client serveur . . . . . . . . . . . . . . . 11
+     5.1 example 1 : connexion et telechargement d'un fichier avec 
+         succes . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+     5.2 example 2 : authorisation d'une personne a telecharger
+         avec echec . . . . . . . . . . . . . . . . . . . . . . . . . 12
+ 
+
+
+Bredariol & Poussard                                            [Page 1]
+
+                  Service de Partage de Fichier (SPF)         13/01/2019
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+Bredariol & Poussard                                            [Page 2]
+
+                  Service de Partage de Fichier (SPF)         13/01/2019
+
+
+1 Introduction
+
+   Dans le cadre du projet de C de STRI 2018/2019, la programmation d'un
+   client / serveur permettant le partage de fichier necessite la mise
+   en place d'un standard permettant la communication entre ces deux
+   entites. Cette specification permet la mise en place d'un standard
+   permettant aux deux etudiants d'avoir un cadre de reference quand
+   ceux-ci coderont les differentes fonction du programme. De plus
+   l'utilisation d'un standard permettra a d'autre application qui
+   respect celui-ci de pouvoir s'interfacer avec les programmes
+   developes, nous aborderons donc la logique qui a guidee notre
+   conception puis expliquerons les differents standards de
+   communication entre serveur et client que nous mettons en place.
+
+   L'application develope aura pour but de permettre a plusieurs
+   utilisateurs d'acceder a un serveur de stockage de fichiers depuis un
+   client. l'application aura un systeme de comptes avec un identifiant
+   et mot de passe pour chaque utilisateurs. chaque utilisateurs aura
+   son espace de stockage dont il pourra obtenir les informations tel
+   que espace, nombrede de fichiers... chaque utilisateur pourra
+   autoriser un ou plusieurs autre utilisateurs a venir telecharger ses
+   fichiers. les utilisateurs pourront donc telecharger les fichiers
+   authorises et televerser des fichier dans les limites de leur espace
+   de stockage et de la taille des fichiers.
+2 Terminologie
+
+   Les mots cles "DOIT", "NE DOIT PAS", "EXIGE", "DEVRA", "NE DEVRA
+   PAS", "DEVRAIT", "NE DEVRAIT PAS", "RECOMMANDE", "PEUT", et
+   "FACULTATIF" en majuscules dans ce document sont a interpreter comme
+   decrit dans le BCP 14, [RFC2119].
+
+   Dans les PDU, les messages echanges sont mis entre guillements "" le
+   texte a l'interieur obeit aux regles suivantes :
+
+   serveur ou client en debut de ligne indique qui envoie le message. le
+   texte entre crochets [] est RECOMMANDE. le texte entre chevrons <>
+   varie mais DOIT etre implemente. les 3 petits points ... indiuquent
+   une repetition FACULTATIF de l'element qui les precedes. le reste du
+   texte DOIT etre implemente tel qu'il est decrit.
+
+
+3 Logique
+
+   il existe 3 types d'echanges d'informations entre le client et le
+   serveur qui DOIT respecter un format precis a savoir un chiffre a 3
+   numero suivie d'un message FACULTATIF
+
+3.1 requetes et reponses
+ 
+
+
+Bredariol & Poussard                                            [Page 3]
+
+                  Service de Partage de Fichier (SPF)         13/01/2019
+
+
+   une requete ou une reponse prendra la forme suivante
+   "0<numero de la requete ou de la reponse> [message d'ecrivant la
+   requete ou la reponse]"
+
+   une requete commence donc toujours par un 0
+   example : "001 connexion etablie"
+
+3.2 erreurs
+
+   une erreur prendra la forme suivante
+   "1<numero de l'erreur> [message decrivant l'erreur]"
+   une requete commence donc toujours par un 1
+
+3.3 donnees
+
+   un echange de donnee prendra la forme suivante
+   "200 [donnees]"
+   une echange de donnees commence par un 200.
+
+
+4 Message echanges
+
+4.1 Erreurs generales
+
+4.1.1 Message ne respectant pas le protocole
+
+   Si un message envoyer par le client ou le serveur ne respecte pas le
+   format du protocole, celui-ci enverra le message suivant : serveur :
+   "100 [le message recue ne respecte pas le protocole]
+
+4.1.2 Un utilisateur n'as pas les droits pour effectuer une requete
+
+   Si le serveur recoit une requete qui est correcte mais qu'il ne peut
+   pas executer car l'utilisateur n'as pas les droits suffisants, le
+   serveur DOIT repondre
+   serveur : "101 [l'utilisateur <nom d'utilisateur> n'as pas les droits
+   suffisant pour effectuer la requete.
+
+4.2 Etablissement de connexion
+
+4.2.1 logique
+
+   Quand le client se connecte au serveur sur un port, le serveur DOIT
+   envoier un message confirmant la connexion.
+
+4.2.2 PDU
+
+   la connexion serveur client a ete etablie
+ 
+
+
+Bredariol & Poussard                                            [Page 4]
+
+                  Service de Partage de Fichier (SPF)         13/01/2019
+
+
+   serveur : "001 [Connexion etablie]"
+
+
+4.2.3 Erreurs
+
+   Si le serveur n'arrive pas a etablir une connexion celui-ci DEVRAIT
+   afficher le message suivante dans la console
+   serveur : "102 [Erreur a l'etablissement de la connexion avec un
+   client]"
+
+   Si le serveur ne repond pas au bout de 10 secondes, le client DEVRAIT
+   afficher le message suivante dans la console
+   serveur : "103 [Le serveur ne repond pas]"
+
+4.3 Identification
+
+4.3.1 logique
+
+   Quand une connexion a ete etablie correctement, le serveur DOIT
+   demander au client de s'authentifier puis le client DOIT lui
+   repondre, enfin en fonction de la reussite ou non le serveur DOIT
+   envoyer au client une information
+
+4.3.2 PDU
+
+   le serveur demande l'authentification au client
+   serveur : "002 [Authentification requise]"
+
+   le client repond avec ses identifiants
+   client : "003 <login> <mot de passe>"
+
+   le serveur accepte les identifiants
+   serveur : "004 [Authentification reussie]
+
+
+4.3.3 Erreurs 
+
+   si le serveur n'accepte pas l'authentification car les identifiants
+   sont incorrectes il DOIT envoyer la reponse suivante
+   serveur : "104 [login et/ou mot de passe incorrect]" si
+   l'authentification echoue le serveur DOIT envoyer le code suivant au
+   client
+   serveur : "105 [echec d'authentification]"
+
+4.4 Inscription
+
+4.4.1 logique
+
+ 
+
+
+Bredariol & Poussard                                            [Page 5]
+
+                  Service de Partage de Fichier (SPF)         13/01/2019
+
+
+   si un utilisateur n'a pas d'identifiants, il peut s'inscrire au
+   service, le client DOIT envoyer un message contenant les informations
+   necessaire a l'inscription, le serveur DOIT lui repondre s'il accepte
+   ou non l'inscription.
+
+4.4.2 PDU
+
+   le client envoie une requete d'inscription
+   client : "006 <login> <mot de passe>"
+
+   le serveur accepte l'inscription
+   serveur : "007 [Inscription realisee]
+
+
+
+4.4.3 Erreurs
+
+   le serveur n'accepte pas l'inscription car le login est deja utilise
+   serveur : "106 [le nom d'utilisateur existe deja]
+
+   Si le serveur n'arrive pas a inscrire l'utilisateur il enverra
+   l'erreur suivante
+   serveur : "107 [echec a l'inscription de l'utilisateur]"
+
+4.5 Televerser un fichier
+
+4.5.1 logique
+
+   Quand un utilisateur souhaite televerser un fichier sur le serveur,
+   le client DOIT envoyer un message au prealable au serveur afin de
+   l'informer qu'un fichier va etre envoye. suite a cela le serveur DOIT
+   informer le client qu'il est pret a recevoir le fichier. le client
+   DOIT envoyer le fichier, enfin le serveur DOIT confirmer bonne
+   reception du fichier ou DOIT envoyer un message d'erreur.
+
+4.5.2 PDU
+
+   le client signale qu'il va envoyer un fichier
+   client : "008 [demande d'envoie de fichier]"
+
+   le serveur informe qu'il est pret a recevoir le fichier
+   serveur : "009 [serveur pret pour la reception]
+
+   le client envoie le fichier
+   client : "200 <donnees>"
+
+   le serveur confirme la reception du fichier
+   serveur : "010 [fichier bien recue]
+ 
+
+
+Bredariol & Poussard                                            [Page 6]
+
+                  Service de Partage de Fichier (SPF)         13/01/2019
+
+
+4.5.3 Erreurs
+
+   si l'utilisateur n'a plus assez de place pour l'envoie du fichier, le
+   serveur DOIT lui signaler avec un message d'erreur 
+   serveur : "108 [place insuffisante pour l'envoi du fichier]"
+
+   si l'envoie de fichier echoue pour une autre raison, le serveur DOIT
+   envoyer le message d'erreur suivant
+   serveur : "109 [echec pendant le televersement du fichier"
+
+4.6 Authoriser un utilisateur a telecharger un fichier
+
+4.6.1 logique
+
+   si une utilisateur souhaite qu'un autre utilisateur telecharge un
+   fichier qui lui appartient, le client DOIT envoyer une requete pour
+   specifier le fichier en question et l'utilisateur concerne, suite a
+   cela, le serveur DOIT repondre s'il accepte ou non la demande.
+
+4.6.2 PDU
+
+   le client demande a authoriser un utilisateur a telecharger son
+   fichier
+   client : "011 <nom du fichier> <utilisateur>"
+
+   si le serveur accepte il DOIT repondre au client
+   serveur : "012 [authorisation accepte]"
+
+4.6.3 Erreurs
+
+   si le nom d'utilisateur est incorrecte, le serveur DOIT repondre 
+   serveur : "110 <nom d'utilisateur> [est incorrecte]"
+
+   si le nom du fichier est incorrecte, le serveur DOIT repondre 
+   serveur : "111 <nom du fichier> [est incorrecte]"
+
+   si l'authorisation echoue pour une autre raison, le serveur DOIT
+   envoyer le message suivant
+   serveur : "112 [echec d'authorisation de droit de telechargement]"
+
+4.7 Enlever un utilisateurs de la liste des authorises a telecharger un
+   fichier
+
+4.7.1 logique
+
+   si une utiisateur souhaite qu'un autre utilisateur n'ai plus le droit
+   de telecharger un fichier qui lui appartient, le client DOIT envoyer
+   une requete pour specifier le fichier en question et l'utilisateur
+ 
+
+
+Bredariol & Poussard                                            [Page 7]
+
+                  Service de Partage de Fichier (SPF)         13/01/2019
+
+
+   concerne, suite a cela, le serveur DOIT repondre s'il accepte ou non
+   la demande.
+
+4.7.2 PDU
+
+   le client demande a enlever un utilisateur de la liste des
+   utilisateurs authorises a telecharger son fichier
+   client : "013 <nom du fichier> <utilisateur>"
+
+   si le serveur accepte il DOIT repondre au client
+   serveur : "014 [utilisateur enleve]"
+
+4.7.3 Erreurs
+
+   si le nom d'utilisateur est incorrecte, le serveur DOIT repondre
+   serveur : "110 <nom d'utilisateur> [est incorrecte]"
+
+   si le nom du fichier est incorrecte, le serveur DOIT repondre
+   serveur : "111 <nom du fichier> [est incorrecte]"
+
+   si l'authorisation echoue pour une autre raison, le serveur DOIT
+   envoyer le message suivant
+   serveur : "113 [echec a l'interdiction d'un utilisateur de
+   telecharger un fichier]"
+
+4.8 Etat de l'espace de stockage
+
+4.8.1 logique
+
+   Si un utilisateur souhaite avoir des informations sur l'etat de son
+   espace de stockage, le client DOIT envoyer une requete puis le
+   serveur DOIT lui repondre les information souhaitees.
+
+4.8.2 PDU
+
+   le client demande des informations sur l'etat de son espace de
+   stockage
+   client : "015 [Demande d'information de l'etat de l'espace]"
+
+   le serveur DOIT repondre
+   serveur : "016 nb=<nombre de fichier televerses> quota=<quota
+   maximum> [nom=<nom du fichier> [utilisateurs=[utilisateur]...]..."
+
+4.8.3 Erreurs
+
+   Si le serveur ne peut pas repondre a la demande il DOIT envoyer le
+   message d'erreur suivant
+   serveur : "114 [echec au listage de l'etat de stockage de
+ 
+
+
+Bredariol & Poussard                                            [Page 8]
+
+                  Service de Partage de Fichier (SPF)         13/01/2019
+
+
+   l'utilisateur]"
+
+4.9 Renommer un fichier televerse
+
+4.9.1 logique
+
+   pour renommer un fichier televerser le client DOIT envoyer une
+   requete contenant le nom du fichier ainsi que son nouveau nom, le
+   serveur DOIT ensuite lui repondre s'il accepte ou non sa demande.
+
+4.9.2 PDU
+
+   le client souhaite renomer un fichier
+   client : "017 <nom du fichier> <nouveau nom du fichier>"
+
+   le serveur informe que le changement de nom a ete realise avec succes
+   serveur "018 [changement de nom reussie]"
+
+4.9.3 Erreurs
+
+   si le nom du fichier est incorrecte, le serveur DOIT repondre 
+   Serveur : "111 <nom du fichier> [est incorrecte]"
+
+   si le nouveau nom de fichier est incorrect le serveur DOIT repondre 
+   serveur : "115 [le nouveau nom de fichier est incorrect]"
+
+   si le changement de nom echoue le serveur DOIT repondre
+   serveur : "116 [echec a la modification du nom de fichier]"
+
+4.10 Supprimer un fichier
+
+4.10.1 logique
+
+   Pour supprimer un fichier, le client DOIT envoyer une requete
+   contenant le nom du fichier, le serveur repondra par la suite pour
+   indiquer si l'operation c'est realise avec succes.
+
+4.10.2 PDU
+
+   le client souhaite supprimer un fichier
+   client : "019 <nom du fichier>"
+
+   si la suppression se deroule correctement le serveur DOIT repondre
+   serveur : "020 <nom du fichier> [a ete supprime]"
+
+4.10.3 Erreurs
+
+   Si le nom du fichier est incorrecte, le serveur DOIT repondre 
+ 
+
+
+Bredariol & Poussard                                            [Page 9]
+
+                  Service de Partage de Fichier (SPF)         13/01/2019
+
+
+   Serveur : "111 <nom du fichier> [est incorrecte]"
+
+   si le serveur n'arrive pas a supprimer le fichier il DOIT repondre
+   serveur : "117 [echec a la suppression du fichier]
+
+4.11 Liste des fichiers des autres utilisateurs telechargeale depuis le
+   compte
+
+4.11.1 logique
+
+   si un utilisateur souhaite obtenir la liste des fichiers qu'il peut
+   telecharger partages par les autres utilisateurs, le client DOIT
+   envoyer une requete puis le serveur DOIT lui repondre la liste des
+   fichiers.
+
+4.11.2 PDU
+
+   le client demande la liste des fichiers
+   client : "021 [liste des fichiers partages authorises]
+
+   le serveur lui repond la liste
+   serveur "022 [<nom du fichier>]..."
+
+4.11.3 Erreurs
+
+   Si le requete ne peut aboutir le serveur DOIT repondre
+   serveur : "118 [echec a la reponde de liste de fichiers
+   telechargeables partages]"
+
+4.12 Telecharger un fichier
+
+4.12.1 logique
+
+   Pour telecharger un fichier, le client va envoyer une requete au
+   serveur, le serveur DOIT directement envoyer le fichier desires au
+   client. A la fin de l'envoi de fichier le serveur DOIT envoyer un
+   message pour signaler cette fin.
+
+4.12.2 PDU
+
+   le client demande a telecharger un fichier
+   client : "023 <nom du fichier>"
+
+   le serveur envoie les donnees
+   serveur : "200 <donnees>"
+
+   a la fin le serveur envoie le message
+   serveur : "024 [transfert termine]"
+ 
+
+
+Bredariol & Poussard                                           [Page 10]
+
+                  Service de Partage de Fichier (SPF)         13/01/2019
+
+
+4.12.3 Erreurs
+
+   Si le nom du fichier est incorrecte, le serveur DOIT repondre
+   Serveur : "111 <nom du fichier> [est incorrecte]"
+
+   si l'envoi du fichier echoue le serveur DOIT repondre
+   serveur : "119 [erreur pendant le transfert du fichier]
+
+4.13 Suppression de compte
+
+4.13.1 logique
+
+   pour supprimer un utilisateur, l'utilisateur DOIT etre authentifier
+   en tant qu'administrateur, le client DOIT envoyer une requete puis le
+   serveur DOIT repondre pour indiquer si la requete a reussie.
+
+4.13.2 PDU
+
+   l'administrateur envoie la requete 
+   client : "025 <nom d'utilisateur>"
+
+   le serveur repond que la requete est execute avec succes
+   serveur : "026 <nom d'utilisateur> [supprime]"
+
+4.13.3 Erreurs
+
+   si le nom d'utilisateur est incorrecte, le serveur DOIT repondre 
+   serveur : "110 <nom d'utilisateur> [est incorrecte]"
+
+   si la requete ne peut aboutir le serveur DOIT repondre
+   serveur : "120 [suppression impossible]"
+
+
+5 Examples d'echanges client serveur
+
+5.1 example 1 : connexion et telechargement d'un fichier avec succes
+
+   le client se connecte au serveur
+   Serveur : "001 Connexion etablie"
+
+   le serveur demande au client de s'authentifier
+   Serveur : "002 Authentification requise"
+
+   le client envoie ses identifiants au server
+   Client  : "003 Rick m0rtY"
+
+   le serveur indique au client que l'authentification est reussie
+   Serveur : "004 Authentification reussie"
+ 
+
+
+Bredariol & Poussard                                           [Page 11]
+
+                  Service de Partage de Fichier (SPF)         13/01/2019
+
+
+   le client veux telechargr le fichier "toto.txt"
+   Client  : "023 toto.txt"
+
+   le serveur envoie le contenue du fichier
+   Serveur : "200 contenu de totoEOF"
+
+   le serveur indique au client la fin du transfert
+   serveur : "024 Transfert termine"
+
+5.2 example 2 : authorisation d'une personne a telecharger avec echec
+
+   le client veut authoriser l'utilisateur "bob" a telecharger le
+   fichier "toto.txt" mais se trompe a la saisie
+   Client  : "011 toto.txt bpb"
+
+   le serveur indique que le nom d'utilisateur donne est incorrect
+   Serveur : "110 bpb est incorrecte"
+
+   le client re envoie la requete correcte
+   Client  : "011 toto.txt bob"
+
+   le serveur indique que la requete est correcte
+   Serveur : "012 authorisation accepte"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bredariol & Poussard                                           [Page 12]
