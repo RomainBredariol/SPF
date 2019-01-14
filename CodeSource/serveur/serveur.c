@@ -21,6 +21,7 @@
 
 #include "serveur.h"
 #include "user.h"
+#include "fonctions.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -416,7 +417,10 @@ int envoyerContenuFichierBinaire(char *nomFichier){
 }
 
 int executerRequete(char * requete){
-	
+	if(strcmp(requete, "0\n")==0){
+		Emission("Au revoir!\n");
+		TerminaisonClient();
+	}
 	return 0;
 }
 

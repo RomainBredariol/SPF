@@ -219,18 +219,23 @@ int afficher_menu(int user){
 }
 
 //recupere le choix du menu de l'utilisateur
-int choix_menu(){
+int choix_menu(int user){
 	char choix[2];
 	
 	printf("Veuillez entre le numero de l'option souhaitee :\n");
 	scanf("%s", choix);
 
 	printf("choix : %s\n", choix);
+	strcat(choix, "\n");
 
-	if(strcmp(choix, "0") == 0){
-		printf("Au revoir !\n");
-		Terminaison();
+	if(user == 4){
+		if(strcmp(choix, "7")==0){
+			printf("impossible d'envoyer cette requete vous n'y etes pas autorise\n");
+			return -1;
+		}
 	}
+
+	Emission(choix);
 	return 0;
 }
 

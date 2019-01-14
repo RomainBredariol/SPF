@@ -28,14 +28,14 @@ int main() {
 			if(strcmp(message, "004")==0){
 				printf("Bienvenue\n");
 				afficher_menu(4);
-				choix_menu();
+				choix_menu(4);
 			}
 
 			//si le serveur confirme l'authentification du Su
 			if(strcmp(message, "005")==0){
 				printf("Bienvenue Su\n");
 				afficher_menu(5);
-				choix_menu();
+				choix_menu(5);
 			}
 
 			free(message);

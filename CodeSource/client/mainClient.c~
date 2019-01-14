@@ -26,14 +26,16 @@ int main() {
 
 			//si le serveur confirme l'authentification d'un utilisateur
 			if(strcmp(message, "004")==0){
-				printf("Bienvenu\n");
+				printf("Bienvenue\n");
 				afficher_menu(4);
+				choix_menu();
 			}
 
 			//si le serveur confirme l'authentification du Su
 			if(strcmp(message, "005")==0){
-				printf("Bienvenu Su\n");
+				printf("Bienvenue Su\n");
 				afficher_menu(5);
+				choix_menu();
 			}
 
 			free(message);

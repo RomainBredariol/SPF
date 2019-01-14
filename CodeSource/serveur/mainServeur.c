@@ -23,7 +23,7 @@ int main() {
 			while(fini != 1){
 				//message recu du client
 				message = Reception();
-				printf("%s\n", message);
+				printf("j'ai recu : %s\n", message);
 				
 				if(message != NULL){
 					//execute la demande du client

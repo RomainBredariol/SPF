@@ -416,28 +416,8 @@ int envoyerContenuFichierBinaire(char *nomFichier){
 }
 
 int executerRequete(char * requete){
-	//if(requete == 1){
-	//	televerser();
-	//}
-	//if(requete == 2){
-	//	telecharger();
-	//}
-	//if(requete == 3){
-	//	autoriserUser();
-	//}
-	//if(requete == 4){
-	//	get_Etat();
-	//}
-	//if(requete == 5){
-	//	gestionFichier();
-	//}
-	//if(requete == 6){
-	//	get_Fichier();
-	//}
-	//if(requete == 7){
-	//	gestionCompte();
-	//}
-	if(requete == 0){
+	if(strcmp(requete, "0\n")==0){
+		Emission("Au revoir!\n");
 		TerminaisonClient();
 	}
 	return 0;
