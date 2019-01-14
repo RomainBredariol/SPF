@@ -41,7 +41,6 @@ int EmissionBinaire(char *donnees, size_t taille);
 
 int authentification();
 int afficher_menu(int user);
-int choix_menu();
 
 /* Ferme la connexion.
  */
