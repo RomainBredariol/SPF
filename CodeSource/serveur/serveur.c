@@ -20,7 +20,7 @@
 #include <errno.h>
 
 #include "serveur.h"
-#include "user.h"
+#include "lib.h"
 
 #define TRUE 1
 #define FALSE 0
