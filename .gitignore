@@ -1,3 +1,7 @@
+#exe
+exe
+output
+
 #swap
 *.swp
 *.c~
