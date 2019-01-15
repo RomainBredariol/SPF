@@ -33,7 +33,7 @@ int is_user(char * login_mdp){
 		}
 	}else{
 		//teste le login et mdp par rapport a un utilisateur lambda
-		FILE * user_list = fopen("user_list", "r");
+		FILE * user_list = fopen("users", "r");
 		if(user_list == NULL){
 			printf("Erreur lecture du ficher user\n");
 			return -1;
@@ -54,7 +54,3 @@ int is_user(char * login_mdp){
 	
 	return 0;
 }
-
-
-
-

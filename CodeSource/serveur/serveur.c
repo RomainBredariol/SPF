@@ -20,8 +20,12 @@
 #include <errno.h>
 
 #include "serveur.h"
+<<<<<<< HEAD
 #include "user.h"
 #include "fonctions.h"
+=======
+#include "lib.h"
+>>>>>>> master
 
 #define TRUE 1
 #define FALSE 0
