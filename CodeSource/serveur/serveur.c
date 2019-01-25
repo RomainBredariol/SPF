@@ -21,7 +21,6 @@
 
 #include "serveur.h"
 #include "lib.h"
-#include "fonctions.h"
 
 #define TRUE 1
 #define FALSE 0

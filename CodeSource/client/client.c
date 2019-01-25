@@ -167,7 +167,7 @@ int ReceptionBinaire(char *donnees, size_t tailleMax) {
 	}
 }
 
-/* Envoie des donnŽes au serveur en prŽcisant leur taille.
+/* Envoie des donnï¿½es au serveur en prï¿½cisant leur taille.
  */
 int EmissionBinaire(char *donnees, size_t taille) {
 	int retour = 0;
@@ -178,92 +178,6 @@ int EmissionBinaire(char *donnees, size_t taille) {
 	} else {
 		return retour;
 	}
-}
-
-int authentification(){
-	//donnee sera la chaine formate envoye au serveur
-	char login[100] , mdp[100], donnee[210];
-	printf("Veuillez vous identifer\n");
-	printf("login :\n");
-	//recuperation du login
-	scanf("%s", login);
-
-	printf("password :\n");
-	//recuperation du mdp
-	scanf("%s", mdp);
-
-	//formatage de la chaine avec le bon id de requete
-	sprintf(donnee, "003 %s %s\n", login, mdp);
-
-	//envoie de la chaine au serveur
-	Emission(donnee);
-	return 0;
-}
-
-//affiche le menu en fonction du statut client
-int afficher_menu(int user){
-	printf("========= Menu =========\n");
-	printf("1 - Televerser\n");
-	printf("2 - Telecharger\n");
-	printf("3 - Autorisation users\n");
-	printf("4 - Etat\n");
-	printf("5 - Gerer fichiers\n");
-	printf("6 - Liste fichiers telechargeable\n");
-	
-	//Si l'utilisateur est l'admin
-	if(user == 5){
-		printf("7 - Gestion des comptes\n");
-	}
-	printf("0 - Quitter\n\n");
-	return 0;
-}
-
-//recupere le choix du menu de l'utilisateur
-int choix_menu(int user){
-	char choix[2], requete[300], login[100], mdp[50], donnee[200];
-
-	printf("Veuillez entre le numero de l'option souhaitee :\n");
-	scanf("%s", choix);
-
-	printf("choix : %s\n", choix);
-
-	if(user == 4){
-		strcpy(requete, "204 ");
-		if(strcmp(choix, "7")==0){
-			printf("impossible d'envoyer cette requete vous n'y etes pas autorise\n");
-			return -1;
-		}
-	}else{
-		strcpy(requete, "205 ");
-		if(strcmp(choix, "7")==0){
-			strcat(requete, "7.");
-
-			printf("=========================================\n");
-			printf("Veuillez entre le numero de l'option souhaitee :\n");
-			printf("1 - Ajouter un utilisateur\n");
-			printf("2 - Supprimer un utilisateur\n");
-			printf("3 - Modifier les infos super utilisateur\n");
-
-			scanf("%s", choix);
-			if(strcmp(choix, "1")==0){
-				printf("Veuillez saisir le login et mdp de l'utilisateur a ajouter\n");
-				printf("login :\n");
-				scanf("%s", login); 
-				printf("password :\n");
-				scanf("%s", mdp);
-				
-				sprintf(donnee," %s %s", login, mdp);
-			}
-		}
-
-	}
-
-	strcat(requete, choix);
-	strcat(requete, donnee);
-	strcat(requete, "\n");
-
-	Emission(requete);
-	return 0;
 }
 
 /* Ferme la connexion.
