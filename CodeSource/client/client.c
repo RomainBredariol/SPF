@@ -221,21 +221,50 @@ int afficher_menu(int user){
 //recupere le choix du menu de l'utilisateur
 int choix_menu(int user){
 	char choix[2];
-	
+	char *requete, *login, *mdp;
+	char *donnee;
+
 	printf("Veuillez entre le numero de l'option souhaitee :\n");
 	scanf("%s", choix);
 
 	printf("choix : %s\n", choix);
-	strcat(choix, "\n");
 
 	if(user == 4){
+		strcpy(requete, "204 ");
 		if(strcmp(choix, "7")==0){
 			printf("impossible d'envoyer cette requete vous n'y etes pas autorise\n");
 			return -1;
 		}
+	}else{
+		strcpy(requete, "205 ");
+		if(strcmp(choix, "7")==0){
+			strcat(requete, "7.");
+
+			printf("=========================================\n");
+			printf("Veuillez entre le numero de l'option souhaitee :\n");
+			printf("1 - Ajouter un utilisateur\n");
+			printf("2 - Supprimer un utilisateur\n");
+			printf("3 - Modifier les infos super utilisateur\n");
+
+			scanf("%s", choix);
+			if(strcmp(choix, "1")==0){
+				printf("Veuillez saisir le login et mdp de l'utilisateur a ajouter\n");
+				printf("login :\n");
+				scanf("%s", login); 
+				printf("password :\n");
+				scanf("%s", mdp);
+				
+				sprintf(donnee," %s %s", login, mdp);
+			}
+		}
+
 	}
 
-	Emission(choix);
+	strcat(requete, choix);
+	strcat(requete, donnee);
+	strcat(requete, "\n");
+
+	Emission(requete);
 	return 0;
 }
 

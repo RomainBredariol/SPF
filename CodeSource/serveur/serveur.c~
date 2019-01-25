@@ -20,7 +20,8 @@
 #include <errno.h>
 
 #include "serveur.h"
-#include "user.h"
+#include "lib.h"
+#include "fonctions.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -416,10 +417,29 @@ int envoyerContenuFichierBinaire(char *nomFichier){
 }
 
 int executerRequete(char * requete){
-	if(strcmp(requete, "0\n")==0){
-		Emission("Au revoir!\n");
-		TerminaisonClient();
+	char codeUser[3];
+	char choix[1];
+
+	sscanf(requete, "%s %s\n", codeUser, choix);
+
+	//Si c'est un user normal
+	if(strcmp(codeUser, "204")==0){
+		//Quitter
+		if(strcmp(choix, "0\n")==0){
+			Emission("Au revoir!\n");
+			TerminaisonClient();
+		}
 	}
+
+	//si c'est le su
+	if(strcmp(codeUser, "205")==0){
+		//Quitter
+		if(strcmp(choix, "0\n")==0){
+			Emission("Au revoir!\n");
+			TerminaisonClient();
+		}
+	}
+
 	return 0;
 }
 

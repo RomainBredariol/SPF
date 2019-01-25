@@ -11,7 +11,7 @@ int main() {
 
 
 	// message de bienvenue
-	printf("Bienvneue sur le client SPF\n\n");
+	printf("Bienvenue sur le client SPF\n\n");
 	// demande de l'ip
 	printf("Veuillez indiquer l'ip du serveur (appuyer sur entree pour localhost par defaut)\n");
 	fgets(ip, 15, stdin);
@@ -27,7 +27,7 @@ int main() {
 	ip[strlen(ip)-1] = '\0';
 	}
 	// demander le port
-	printf("Veuillez indiquer le port (appuyer sur entree pour 1337 par defaut\n");
+	printf("Veuillez indiquer le port (appuyer sur entree pour 1337 par defaut)\n");
 	fgets(port, 7, stdin);
 	// si aucune port n'est donné, utiliser le port par défaut
 	if (strcmp(port, "\n") == 0 ) {
