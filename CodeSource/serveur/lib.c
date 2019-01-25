@@ -57,15 +57,25 @@ int is_user(char * login_mdp){
 
 //ajoute un utilisateur a la liste
 int addUser(char *donnee){
+	int ecode;
+
 	FILE * user_list = fopen("users", "a");
 
 	if(user_list == NULL){
 		printf("Erreur fopen users\n");
 		return -1;
 	}
-	printf("donnee recu : %s\n", donnee);
 
-	fprintf(user_list, "%s", donnee);
+	strcat(donnee, "\n");
 	
+	ecode = fprintf(user_list, "%s", donnee);
+	if(ecode < 0){
+		printf("Erreur ecriture de donnee\n");
+		return -1;
+	}
+	
+	fclose(user_list);
+
+	Emission("L'utilisateur a ete cree\n");
 	return 0;
 }
