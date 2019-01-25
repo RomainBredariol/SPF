@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "client.h"
 
 // connexion permet d'ouvrir une connexion avec le serveur, elle va demander l'ip et le port 
 // à l'utilisateur, si celui de rentre rien, une IP par defaut sera utilisé (localhost) et un
@@ -65,16 +66,20 @@ int connexion() {
 // authentification permet à l'utilisateur de s'authentifier
 int authentification(){
 	char login[100];	// chaine utilisé pour le login
-	mdp[100];		// chaine utilisé pour le mot de passe
-	donnee[210]; 		//donnee sera la chaine formate envoye au serveur
+	char mdp[100];		// chaine utilisé pour le mot de passe
+	char donnee[210]; 		//donnee sera la chaine formate envoye au serveur
 	char c; 		// char pour vider le buffer
+
+	// initialisation des login et mdp
+	memset(login,0,100);
+	memset(mdp,0,100);
 
 	// lecture des identifiants de l'utilisateur
 	printf("Veuillez vous identifer\n");
 	printf("login :\n");
 	
 	//recuperation du login
-	fgets(login, 99, stdin);
+	fgets(login, 100, stdin);
 
 	// vider le stdin si l'utilisateur depasse
 	if (login[99] != '\0') {

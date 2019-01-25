@@ -9,3 +9,9 @@ int connexion();
 // authentification permet à l'utilisateur de s'authentifier
 int authentification();
 
+//affiche le menu en fonction du statut client
+int afficher_menu(int user);
+
+//recupere le choix du menu de l'utilisateur
+int choix_menu(int user);
+
