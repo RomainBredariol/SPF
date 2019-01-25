@@ -54,3 +54,18 @@ int is_user(char * login_mdp){
 	
 	return 0;
 }
+
+//ajoute un utilisateur a la liste
+int addUser(char *donnee){
+	FILE * user_list = fopen("users", "a");
+
+	if(user_list == NULL){
+		printf("Erreur fopen users\n");
+		return -1;
+	}
+	printf("donnee recu : %s\n", donnee);
+
+	fprintf(user_list, "%s", donnee);
+	
+	return 0;
+}

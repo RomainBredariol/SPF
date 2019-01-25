@@ -417,11 +417,13 @@ int envoyerContenuFichierBinaire(char *nomFichier){
 }
 
 int executerRequete(char * requete){
-	char codeUser[3];
+	char codeUser[5];
 	char choix[1];
-	char *donnee;
+	char donnee[200];
 
-	sscanf(requete, "%s %s %s\n", codeUser, choix, donnee);
+	sscanf(requete, "%s %s %[^\n]", codeUser, choix, donnee);
+
+	printf("requete = %s, codeUser = %s, choix = %s, donnee = %s\n", requete, codeUser, choix, donnee);
 
 	//Si c'est un user normal
 	if(strcmp(codeUser, "204")==0){
@@ -434,6 +436,7 @@ int executerRequete(char * requete){
 
 	//si c'est le su
 	if(strcmp(codeUser, "205")==0){
+	printf("cc\n");
 		//Quitter
 		if(strcmp(choix, "0\n")==0){
 			Emission("Au revoir!\n");

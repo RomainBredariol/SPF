@@ -220,9 +220,7 @@ int afficher_menu(int user){
 
 //recupere le choix du menu de l'utilisateur
 int choix_menu(int user){
-	char choix[2];
-	char *requete, *login, *mdp;
-	char *donnee;
+	char choix[2], requete[300], login[100], mdp[50], donnee[200];
 
 	printf("Veuillez entre le numero de l'option souhaitee :\n");
 	scanf("%s", choix);

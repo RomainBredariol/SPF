@@ -60,3 +60,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+*.swo
+
+*.h~
