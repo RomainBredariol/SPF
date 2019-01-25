@@ -1,4 +1,4 @@
- 
+﻿ 
 
 
 
@@ -54,7 +54,8 @@ Table of Contents
 
 
 Bredariol & Poussard                                            [Page 1]
-
+
+
                   Service de Partage de Fichier (SPF)         13/01/2019
 
 
@@ -110,7 +111,8 @@ Bredariol & Poussard                                            [Page 1]
 
 
 Bredariol & Poussard                                            [Page 2]
-
+
+
                   Service de Partage de Fichier (SPF)         13/01/2019
 
 
@@ -166,7 +168,8 @@ Bredariol & Poussard                                            [Page 2]
 
 
 Bredariol & Poussard                                            [Page 3]
-
+
+
                   Service de Partage de Fichier (SPF)         13/01/2019
 
 
@@ -222,7 +225,8 @@ Bredariol & Poussard                                            [Page 3]
 
 
 Bredariol & Poussard                                            [Page 4]
-
+
+
                   Service de Partage de Fichier (SPF)         13/01/2019
 
 
@@ -259,6 +263,9 @@ Bredariol & Poussard                                            [Page 4]
 
    le serveur accepte les identifiants
    serveur : "004 [Authentification reussie]
+   
+   le serveur accepte les identifiants de l’admin
+   serveur :”005 [Authentification reussie] 
 
 
 4.3.3 Erreurs 
@@ -274,11 +281,10 @@ Bredariol & Poussard                                            [Page 4]
 
 4.4.1 logique
 
- 
-
 
 Bredariol & Poussard                                            [Page 5]
-
+
+
                   Service de Partage de Fichier (SPF)         13/01/2019
 
 
@@ -334,7 +340,8 @@ Bredariol & Poussard                                            [Page 5]
 
 
 Bredariol & Poussard                                            [Page 6]
-
+
+
                   Service de Partage de Fichier (SPF)         13/01/2019
 
 
@@ -390,7 +397,8 @@ Bredariol & Poussard                                            [Page 6]
 
 
 Bredariol & Poussard                                            [Page 7]
-
+
+
                   Service de Partage de Fichier (SPF)         13/01/2019
 
 
@@ -446,7 +454,8 @@ Bredariol & Poussard                                            [Page 7]
 
 
 Bredariol & Poussard                                            [Page 8]
-
+
+
                   Service de Partage de Fichier (SPF)         13/01/2019
 
 
@@ -502,7 +511,8 @@ Bredariol & Poussard                                            [Page 8]
 
 
 Bredariol & Poussard                                            [Page 9]
-
+
+
                   Service de Partage de Fichier (SPF)         13/01/2019
 
 
@@ -558,7 +568,8 @@ Bredariol & Poussard                                            [Page 9]
 
 
 Bredariol & Poussard                                           [Page 10]
-
+
+
                   Service de Partage de Fichier (SPF)         13/01/2019
 
 
@@ -614,7 +625,8 @@ Bredariol & Poussard                                           [Page 10]
 
 
 Bredariol & Poussard                                           [Page 11]
-
+
+
                   Service de Partage de Fichier (SPF)         13/01/2019
 
 

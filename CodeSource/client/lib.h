@@ -15,3 +15,5 @@ int afficher_menu(int user);
 //recupere le choix du menu de l'utilisateur
 int choix_menu(int user);
 
+//permet de lire la reponse envoyé par le serveur
+int lireReponse();

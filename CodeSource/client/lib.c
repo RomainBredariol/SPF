@@ -2,16 +2,27 @@
 #include <string.h>
 #include <stdlib.h>
 #include "client.h"
+#include "lib.h"
+#include <unistd.h>
+
+// codes couleurs pour printf
+#define ROUGE "\x1b[31m"
+#define VERT "\x1b[32m"
+#define JAUNE "\x1b[33m"
+#define BLEU "\x1b[34m"
+#define MAGENTA "\x1b[35m"
+#define CYAN "\x1b[36m"
+#define RESET "\x1b[0m"
 
 // connexion permet d'ouvrir une connexion avec le serveur, elle va demander l'ip et le port 
 // à l'utilisateur, si celui de rentre rien, une IP par defaut sera utilisé (localhost) et un
 // port par defaut sera utilisé (1337)
 // renvoie 0 en cas de succés
 int connexion() {
-	char *message;		// un message echange entre le client et le serveur
 	char ip[16];		// ip de connexion au serveur
 	char port[7];		// port de connexion au serveur
 	char c;			// char pour vider le stdin
+	int nb;
 
 	// message de bienvenue
 	printf("Bienvenue sur le client SPF\n\n");
@@ -60,7 +71,24 @@ int connexion() {
 		printf("Erreur d'initialisation\n");
 		return 1;
 	}
-	return 0;
+	nb = lireReponse();
+	return nb;
+}
+
+// fonction qui lie la reponse donné par le serveur. 
+// renvoie un integer qui correspond au code message
+int lireReponse() {
+	char *message;		// un message echange entre le client et le serveur
+	
+	//boucle d'attente de lecture d'un message du serveur
+	message = Reception();	
+	if(message != NULL) {
+		// afficher les message en rouge pour info
+		printf(ROUGE"message recue du serveur : %s"RESET"\n", message);
+		//recup l'identifiant de requete
+		sscanf(message , "%[^ ]", message);
+	}
+	return strtol(message, NULL, 10);
 }
 
 // authentification permet à l'utilisateur de s'authentifier
@@ -106,6 +134,7 @@ int authentification(){
 
 	//envoie de la chaine au serveur
 	Emission(donnee);
+	lireReponse();
 	return 0;
 }
 
