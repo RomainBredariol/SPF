@@ -4,6 +4,7 @@
 #include "client.h"
 #include "lib.h"
 #include <unistd.h>
+#include "libTraitements.h"
 
 // codes couleurs pour printf
 #define ROUGE "\x1b[31m"
@@ -103,12 +104,12 @@ int authentification(){
 	memset(mdp,0,100);
 
 	// lecture des identifiants de l'utilisateur
-	printf("Veuillez vous identifer\n");
+	printf("Veuillez vous identifier\n");
 	printf("login :\n");
 	
 	//recuperation du login
 	fgets(login, 100, stdin);
-
+	
 	// vider le stdin si l'utilisateur depasse
 	if (login[99] != '\0') {
 		while ((c = getchar()) != '\n' && c != EOF) { }
@@ -156,25 +157,85 @@ int afficher_menu(int user){
 	return 0;
 }
 
-//recupere le choix du menu de l'utilisateur
+// execute le choix de l'utilisateur
+// renvoie 1 si l'utilisateur choisit de quitter l'application
 int choix_menu(int user){
-	char choix[2];
+	char choixChar[3];		// choix sous forme de chaine
+	int choix;			// choix transformé en int
 	char *requete, *login, *mdp;
 	char *donnee;
+	char c; 			// char pour vider le stdin
 
 	printf("Veuillez entre le numero de l'option souhaitee :\n");
-	scanf("%s", choix);
+	fgets(choixChar, 3, stdin);
 
-	printf("choix : %s\n", choix);
+	// vider le stdin si l'utilisateur depasse
+	if (choixChar[2] != '\0') {
+		while ((c = getchar()) != '\n' && c != EOF) { }
+	} else {
+		//sinon supprimer le new line
+		choixChar[1] = '\0';
+	}
+	// convertir le choixChar en choix (int)
+	choix = strtol(choixChar, NULL, 10);
+	printf("utilisateur choisi : %d \n",choix);
+
+	// executer le traitement en fonction du choix de l'utilisateur
+	switch(choix) {
+		case 0: 
+			return 1;
+		case 1:
+			televerser();
+			break;
+		case 2:
+			telecharger();
+			break;
+		case 3:
+			autorisations();
+			break;
+		case 4: 
+			etat();
+			break;
+		case 5: 
+			gererFichiers();
+			break;
+		case 6:		
+			listeFichiers();
+			break;
+		case 7:
+			if(user == 5) {
+				gestionComptes();
+			} else {
+				printf("impossible d'envoyer cette requete vous n'y etes pas autorise\n");
+			}
+			break;
+		default:
+			break;
+	}
+	return 0;
+}
+	/*
+
+	refactorer ce code dans les fonctions dediées			
+
 
 	if(user == 4){
 		strcpy(requete, "204 ");
 		if(strcmp(choix, "7")==0){
-			printf("impossible d'envoyer cette requete vous n'y etes pas autorise\n");
 			return -1;
 		}
+
+		if(strcmp(choix,"0")==0){
+			return 0;
+		}
+		return 1; 
 	}else{
 		strcpy(requete, "205 ");
+
+		if(strcmp(choix,"0")==0){
+			return 0;
+		}
+
 		if(strcmp(choix, "7")==0){
 			strcat(requete, "7.");
 
@@ -194,16 +255,18 @@ int choix_menu(int user){
 				
 				sprintf(donnee," %s %s", login, mdp);
 			}
+			return 1;
 		}
 
 	}
-
+	
+	
 	strcat(requete, choix);
 	strcat(requete, donnee);
 	strcat(requete, "\n");
 
 	Emission(requete);
-	return 0;
+	return 1;
 }
-
+*/
 

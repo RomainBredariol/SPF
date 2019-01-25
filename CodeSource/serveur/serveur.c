@@ -424,20 +424,20 @@ int executerRequete(char * requete){
 
 	//Si c'est un user normal
 	if(strcmp(codeUser, "204")==0){
-		//Quitter
-		if(strcmp(choix, "0")==0){
-			Emission("Au revoir!\n");
-			TerminaisonClient();
-		}
+		////Quitter
+		//if(strcmp(choix, "0")==0){
+		//	Emission("Au revoir!\n");
+		//	TerminaisonClient();
+		//}
 	}
 
 	//si c'est le su
 	if(strcmp(codeUser, "205")==0){
-		//Quitter
-		if(strcmp(choix, "0")==0){
-			Emission("Au revoir!\n");
-			TerminaisonClient();
-		}
+		////Quitter
+		//if(strcmp(choix, "0")==0){
+		//	Emission("Au revoir!\n");
+		//	TerminaisonClient();
+		//}
 
 		if(strcmp(choix, "7.1")==0){
 			addUser(donnee);

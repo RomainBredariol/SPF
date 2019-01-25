@@ -18,7 +18,8 @@ int main() {
 	char *message;		// un message echange entre le client et le serveur
 	int codeReponse;	// code de la reponse envoyé par le serveur	
 	int compteurConnexion = 3;	// 3 tentatives de connexions possible
-	int privileges;		//si utilisateur normal = 4 si admin = 5
+	int privileges;		// si utilisateur normal = 4 si admin = 5
+	int continuer; 		// si l'utilisateur souhaite continuer dans le programme
 
 	// etablir une connexion avec le serveur interactivement avec l'utilisateur
 	codeReponse = connexion();
@@ -49,15 +50,17 @@ int main() {
 	}
 	printf("\n");
 
+	// tant que l'utilisateur ne souhaite pas quitter l'application
+	// afficher le menu et traiter le choix qu'il fait
 	do {
 	afficher_menu(privileges);
-	/*
-	codeReponse = choix_menu(privileges);
-	*/
-	} while (codeReponse != 9);
-	// 9 = quitter?
-	
-	Terminaison();
 
+	continuer = choix_menu(privileges);
+	system("clear");
+	} while (continuer != 1);
+		
+	// terminer la connexion
+	printf(VERT"\n\n\n On se quitte parfois pour mieux se retrouver ensuite.\n\n\n\n"RESET);
+	Terminaison();
 	return 0;
 }
