@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "serveur.h"
 
 //definit la structure d'un utilisateur 
 struct user{
