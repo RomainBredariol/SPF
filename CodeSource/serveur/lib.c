@@ -58,7 +58,7 @@ int is_user(char * login_mdp){
 
 //ajoute un utilisateur a la liste
 int addUser(char *donnee){
-	int ecode;
+	int ecode; //error code
 
 	FILE * user_list = fopen("users", "a");
 
@@ -104,5 +104,41 @@ int lancerServeur() {
 	} 
 	// initialiser le serveur sur le port
 	InitialisationAvecService(port);
+	return 0;
+}
+
+//delUser permet de supprimer un utilisateur
+int delUser(char *donnee){
+	char login_mdp[203];
+
+	strcat(donnee, "\n");
+
+	FILE * user_list = fopen("users", "r");
+	FILE * user_list_tmp = fopen("users.tmp", "w");
+
+	if(user_list == NULL){
+		printf("Erreur fopen users\n");
+		return -1;
+	}
+
+	if(user_list_tmp == NULL){
+		printf("Erreur fopen users.tmp\n");
+		return -1;
+	}
+
+	while(fgets(login_mdp, sizeof(login_mdp), user_list)){
+		if(strcmp(login_mdp, donnee)==0){
+			continue;
+		}else{
+			fputs(login_mdp, user_list_tmp);
+		}
+	}
+	
+	fclose(user_list);
+	fclose(user_list_tmp);
+
+	rename("users.tmp", "users");
+
+	Emission("L'utilisateur a ete supprime\n");
 	return 0;
 }

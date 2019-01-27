@@ -211,39 +211,4 @@ int choix_menu(int user){
 	}
 	return 0;
 }
-	/*
-
-	refactorer ce code dans les fonctions dediées			
-
-
-	if(user == 4){
-		strcpy(requete, "204 ");
-		if(strcmp(choix, "7")==0){
-			return -1;
-		}
-
-		if(strcmp(choix,"0")==0){
-			return 0;
-		}
-		return 1; 
-	}else{
-		strcpy(requete, "205 ");
-
-		if(strcmp(choix,"0")==0){
-			return 0;
-		}
-
-		}
-
-	}
-	
-	
-	strcat(requete, choix);
-	strcat(requete, donnee);
-	strcat(requete, "\n");
-
-	Emission(requete);
-	return 1;
-}
-*/
 

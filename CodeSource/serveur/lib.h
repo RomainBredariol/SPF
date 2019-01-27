@@ -9,3 +9,6 @@ int addUser(char *donnee);
 // si aucun port n'est spécifié, la fonction ouvre sur le port par defaut
 // ( port 1337 )
 int lancerServeur();
+
+//supprime un utilisateur 
+int delUser();
