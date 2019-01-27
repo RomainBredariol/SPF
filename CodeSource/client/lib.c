@@ -161,8 +161,6 @@ int afficher_menu(int user){
 int choix_menu(int user){
 	char choixChar[3];		// choix sous forme de chaine
 	int choix;			// choix transformé en int
-	char *requete, *login, *mdp;
-	char *donnee;
 	char c; 			// char pour vider le stdin
 
 	printf("Veuillez entre le numero de l'option souhaitee :\n");
@@ -235,26 +233,6 @@ int choix_menu(int user){
 			return 0;
 		}
 
-		if(strcmp(choix, "7")==0){
-			strcat(requete, "7.");
-
-			printf("=========================================\n");
-			printf("Veuillez entre le numero de l'option souhaitee :\n");
-			printf("1 - Ajouter un utilisateur\n");
-			printf("2 - Supprimer un utilisateur\n");
-			printf("3 - Modifier les infos super utilisateur\n");
-
-			scanf("%s", choix);
-			if(strcmp(choix, "1")==0){
-				printf("Veuillez saisir le login et mdp de l'utilisateur a ajouter\n");
-				printf("login :\n");
-				scanf("%s", login); 
-				printf("password :\n");
-				scanf("%s", mdp);
-				
-				sprintf(donnee," %s %s", login, mdp);
-			}
-			return 1;
 		}
 
 	}

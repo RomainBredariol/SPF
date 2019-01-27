@@ -27,3 +27,11 @@ int listeFichiers();
 int gestionComptes();
 
 
+//addUser permet de saisir un nouvel utilisateur
+int addUser();
+
+//delUser permet de supprimer un utilisateur
+int delUser();
+
+//editSu permet de modifier les login et mdp du Su
+int editSu();
