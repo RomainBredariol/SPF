@@ -135,8 +135,7 @@ int authentification(){
 
 	//envoie de la chaine au serveur
 	Emission(donnee);
-	lireReponse();
-	return 0;
+	return lireReponse();
 }
 
 //affiche le menu en fonction du statut client

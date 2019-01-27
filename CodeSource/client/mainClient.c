@@ -43,7 +43,7 @@ int main() {
 		return -1;
 	}
 	privileges = codeReponse;
-	// souhaiter la bienvneue (nous ne sommes pas des malotrues)
+	// souhaiter la bienvenue (nous ne sommes pas des malotrues)
 	printf("\n\n"JAUNE" Bienvenue "RESET);
 	if (privileges == 5) {
 	printf(CYAN" super utilisateur"RESET);
