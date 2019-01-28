@@ -56,31 +56,6 @@ int is_user(char * login_mdp){
 	return 0;
 }
 
-//ajoute un utilisateur a la liste
-int addUser(char *donnee){
-	int ecode; //error code
-
-	FILE * user_list = fopen("users", "a");
-
-	if(user_list == NULL){
-		printf("Erreur fopen users\n");
-		return -1;
-	}
-
-	strcat(donnee, "\n");
-	
-	ecode = fprintf(user_list, "%s", donnee);
-	if(ecode < 0){
-		printf("Erreur ecriture de donnee\n");
-		return -1;
-	}
-	
-	fclose(user_list);
-
-	Emission("L'utilisateur a ete cree\n");
-	return 0;
-}
-
 // fonction qui lance le serveur en demandant le port d'ouverture 
 // à l'utilisateur
 int lancerServeur() {
@@ -140,5 +115,43 @@ int delUser(char *donnee){
 	rename("users.tmp", "users");
 
 	Emission("L'utilisateur a ete supprime\n");
+	return 0;
+}
+
+//ajoute un utilisateur a la liste
+int addUser(char *donnee){
+	int ecode; //error code
+
+	FILE * user_list = fopen("users", "a");
+
+	if(user_list == NULL){
+		printf("Erreur fopen users\n");
+		return -1;
+	}
+
+	strcat(donnee, "\n");
+	
+	ecode = fprintf(user_list, "%s", donnee);
+	if(ecode < 0){
+		printf("Erreur ecriture de donnee\n");
+		return -1;
+	}
+	
+	fclose(user_list);
+
+	Emission("L'utilisateur a ete cree\n");
+	return 0;
+}
+
+//edition du super utilisateur
+int editSu(char *donnee){
+	char login[100], mdp[100];
+
+	sscanf(donnee, "%s %s", login, mdp);
+
+	strcpy(su.login, login);
+	strcpy(su.mdp, mdp);
+
+	Emission("Les modifications ont bien ete prises en compte\n");
 	return 0;
 }

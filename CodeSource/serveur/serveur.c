@@ -434,6 +434,9 @@ int executerRequete(char * requete){
 		if(strcmp(choix, "7.2")==0){
 			delUser(donnee);
 		}
+		if(strcmp(choix, "7.3")==0){
+			editSu(donnee);
+		}
 	}
 
 	return 0;

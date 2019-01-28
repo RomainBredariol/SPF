@@ -146,6 +146,17 @@ int lecture_login_mdp(char *login, char *mdp){
 
 //editSu permet de modifier les login et mdp du Su
 int editSu(){
-	
+	char login[100];	// chaine utilisé pour le login
+	char mdp[100];		// chaine utilisé pour le mot de passe
+	char donnee[300];
+
+	// lecture des identifiants de l'utilisateur a jouter
+	printf("Veuillez saisir votre nouveau login et nouveau mdp\n");
+	lecture_login_mdp(login, mdp);
+
+	sprintf(donnee,"205 7.3 %s %s\n", login, mdp);
+
+	Emission(donnee);
+
 	return 0;
 }

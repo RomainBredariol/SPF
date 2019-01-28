@@ -12,3 +12,6 @@ int lancerServeur();
 
 //supprime un utilisateur 
 int delUser();
+
+//edition du super utilisateur
+int editSu(char *donnee);
