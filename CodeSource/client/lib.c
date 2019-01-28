@@ -97,7 +97,6 @@ int authentification(){
 	char login[100];	// chaine utilisé pour le login
 	char mdp[100];		// chaine utilisé pour le mot de passe
 	char donnee[210]; 		//donnee sera la chaine formate envoye au serveur
-	char c; 		// char pour vider le buffer
 
 	// initialisation des login et mdp
 	memset(login,0,100);
@@ -105,30 +104,8 @@ int authentification(){
 
 	// lecture des identifiants de l'utilisateur
 	printf("Veuillez vous identifier\n");
-	printf("login :\n");
-	
-	//recuperation du login
-	fgets(login, 100, stdin);
-	
-	// vider le stdin si l'utilisateur depasse
-	if (login[99] != '\0') {
-		while ((c = getchar()) != '\n' && c != EOF) { }
-	} else {
-		//sinon supprimer le new line
-		login[strlen(login)-1] = '\0';
-	}
-	
-	printf("password :\n");
-	//recuperation du mdp
-	fgets(mdp, 99, stdin);
 
-	// vider le stdin si l'utilisateur depasse
-	if (mdp[99] != '\0') {
-		while ((c = getchar()) != '\n' && c != EOF) { }
-	} else {
-		//sinon supprimer le new line
-		mdp[strlen(mdp)-1] = '\0';
-	} 
+	lecture_login_mdp(login, mdp);
 
 	//formatage de la chaine avec le bon id de requete
 	sprintf(donnee, "003 %s %s\n", login, mdp);

@@ -35,3 +35,6 @@ int delUser();
 
 //editSu permet de modifier les login et mdp du Su
 int editSu();
+
+//lecture_login_mdp permet de recuperer le login et le mdp dans le buffer stdin
+int lecture_login_mdp(char *login, char *mdp);

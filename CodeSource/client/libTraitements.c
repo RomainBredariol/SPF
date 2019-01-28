@@ -85,35 +85,11 @@ int gestionComptes() {
 int addUser(){
 	char login[100];	// chaine utilisé pour le login
 	char mdp[100];		// chaine utilisé pour le mot de passe
-	char c; 			// char pour vider le stdin
 	char donnee[300];
 
 	// lecture des identifiants de l'utilisateur a jouter
 	printf("Veuillez saisir le login et mdp de l'utilisateur a ajouter\n");
-	printf("login :\n");
-	
-	//recuperation du login
-	fgets(login, 100, stdin);
-	
-	// vider le stdin si l'utilisateur depasse
-	if (login[99] != '\0') {
-		while ((c = getchar()) != '\n' && c != EOF) { }
-	} else {
-		//sinon supprimer le new line
-		login[strlen(login)-1] = '\0';
-	}
-	
-	printf("password :\n");
-	//recuperation du mdp
-	fgets(mdp, 100, stdin);
-
-	// vider le stdin si l'utilisateur depasse
-	if (mdp[99] != '\0') {
-		while ((c = getchar()) != '\n' && c != EOF) { }
-	} else {
-		//sinon supprimer le new line
-		mdp[strlen(mdp)-1] = '\0';
-	}
+	lecture_login_mdp(login, mdp);
 
 	sprintf(donnee,"205 7.1 %s %s\n", login, mdp);
 
@@ -125,11 +101,22 @@ int addUser(){
 int delUser(){
 	char login[100];	// chaine utilisé pour le login
 	char mdp[100];		// chaine utilisé pour le mot de passe
-	char c; 			// char pour vider le stdin
 	char donnee[300];
 
 	// lecture des identifiants de l'utilisateur a jouter
 	printf("Veuillez saisir le login et le password l'utilisateur a supprimer\n");
+	lecture_login_mdp(login, mdp);
+	
+	sprintf(donnee,"205 7.2 %s %s\n", login, mdp);
+
+	Emission(donnee);
+	return 0;
+}
+
+//lecture_login_mdp permet de recuperer le login et le mdp dans le buffer stdin
+int lecture_login_mdp(char *login, char *mdp){
+	char c; 		// char pour vider le stdin
+
 	printf("login :\n");
 	
 	//recuperation du login
@@ -154,14 +141,11 @@ int delUser(){
 		//sinon supprimer le new line
 		mdp[strlen(mdp)-1] = '\0';
 	}
-
-	sprintf(donnee,"205 7.2 %s %s\n", login, mdp);
-
-	Emission(donnee);
 	return 0;
 }
 
 //editSu permet de modifier les login et mdp du Su
 int editSu(){
+	
 	return 0;
 }

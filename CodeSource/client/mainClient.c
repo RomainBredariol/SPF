@@ -15,7 +15,7 @@
 
 
 int main() {
-	char *message;		// un message echange entre le client et le serveur
+//	char *message;		// un message echange entre le client et le serveur
 	int codeReponse;	// code de la reponse envoyé par le serveur	
 	int compteurConnexion = 3;	// 3 tentatives de connexions possible
 	int privileges;		// si utilisateur normal = 4 si admin = 5
