@@ -167,7 +167,7 @@ int ReceptionBinaire(char *donnees, size_t tailleMax) {
 	}
 }
 
-/* Envoie des donnŽes au serveur en prŽcisant leur taille.
+/* Envoie des donnï¿½es au serveur en prï¿½cisant leur taille.
  */
 int EmissionBinaire(char *donnees, size_t taille) {
 	int retour = 0;
@@ -178,60 +178,6 @@ int EmissionBinaire(char *donnees, size_t taille) {
 	} else {
 		return retour;
 	}
-}
-
-int authentification(){
-	//donnee sera la chaine formate envoye au serveur
-	char login[100] , mdp[100], donnee[210];
-	printf("Veuillez vous identifer\n");
-	printf("login :\n");
-	//recuperation du login
-	scanf("%s", login);
-
-	printf("password :\n");
-	//recuperation du mdp
-	scanf("%s", mdp);
-
-	//formatage de la chaine avec le bon id de requete
-	sprintf(donnee, "003 %s %s\n", login, mdp);
-
-	//envoie de la chaine au serveur
-	Emission(donnee);
-	return 0;
-}
-
-//affiche le menu en fonction du statut client
-int afficher_menu(int user){
-	printf("========= Menu =========\n");
-	printf("1 - Televerser\n");
-	printf("2 - Telecharger\n");
-	printf("3 - Autorisation users\n");
-	printf("4 - Etat\n");
-	printf("5 - Gerer fichiers\n");
-	printf("6 - Liste fichiers telechargeable\n");
-	
-	//Si l'utilisateur est l'admin
-	if(user == 5){
-		printf("7 - Gestion des comptes\n");
-	}
-	printf("0 - Quitter\n\n");
-	return 0;
-}
-
-//recupere le choix du menu de l'utilisateur
-int choix_menu(){
-	char choix[2];
-	
-	printf("Veuillez entre le numero de l'option souhaitee :\n");
-	scanf("%s", choix);
-
-	printf("choix : %s\n", choix);
-
-	if(strcmp(choix, "0") == 0){
-		printf("Au revoir !\n");
-		Terminaison();
-	}
-	return 0;
 }
 
 /* Ferme la connexion.

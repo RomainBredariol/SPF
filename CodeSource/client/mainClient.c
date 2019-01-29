@@ -2,88 +2,68 @@
 #include <string.h>
 #include <stdlib.h>
 #include "client.h"
+#include "lib.h"
+
+// codes couleurs pour printf
+#define ROUGE "\x1b[31m"
+#define VERT "\x1b[32m"
+#define JAUNE "\x1b[33m"
+#define BLEU "\x1b[34m"
+#define MAGENTA "\x1b[35m"
+#define CYAN "\x1b[36m"
+#define RESET "\x1b[0m"
+
 
 int main() {
-	char *message;		// un message echange entre le client et le serveur
-	char ip[16];		// ip de connexion au serveur
-	char port[7];		// port de connexion au serveur
-	char c;			// char pour vider le stdin
+//	char *message;		// un message echange entre le client et le serveur
+	int codeReponse;	// code de la reponse envoyé par le serveur	
+	int compteurConnexion = 3;	// 3 tentatives de connexions possible
+	int privileges;		// si utilisateur normal = 4 si admin = 5
+	int continuer; 		// si l'utilisateur souhaite continuer dans le programme
 
+	// etablir une connexion avec le serveur interactivement avec l'utilisateur
+	codeReponse = connexion();
+	if (codeReponse != 1) {
+		printf("erreur a la connexion \n");
+		return -1;
+	}
+		// rq : si serveur repond pas erreur 103, implementer ??
 
-	// message de bienvenue
-	printf("Bienvneue sur le client SPF\n\n");
-	// demande de l'ip
-	printf("Veuillez indiquer l'ip du serveur (appuyer sur entree pour localhost par defaut)\n");
-	fgets(ip, 15, stdin);
-	// si aucune ip n'est donné, utilier la valeur par defaut
-	if (strcmp(ip, "\n") == 0) { 
-		strcpy(ip,"localhost");
-	} else {
-		// vider le stdin si l'utilisateur depasse
-		if (ip[15] != '\0') {
-			while ((c = getchar()) != '\n' && c != EOF) { }
+	// authentification
+	codeReponse = lireReponse();
+	if (codeReponse != 2) {
+		printf("delais d'attente de demande d'authentificaiton depassée\n");
+	}
+	do {
+		codeReponse = authentification();
+		compteurConnexion--;
+		if (codeReponse == 104 || codeReponse == 105) {
+			printf(JAUNE"\nLogin / mdp incorrect \n"RESET);
 		}
-	//supprimer le new line
-	ip[strlen(ip)-1] = '\0';
+	} while (compteurConnexion != 0 && (codeReponse == 105 || codeReponse == 104));
+	if (codeReponse == 105 || codeReponse == 104) {
+		printf("echec d'authentification au bout de 3 essais \n");
+		return -1;
 	}
-	// demander le port
-	printf("Veuillez indiquer le port (appuyer sur entree pour 1337 par defaut\n");
-	fgets(port, 7, stdin);
-	// si aucune port n'est donné, utiliser le port par défaut
-	if (strcmp(port, "\n") == 0 ) {
-		strcpy(port,"1337");
-	} else {
-		// vider le stdin si l'utilisateur depasse
-		if (port[6] != '\0') {
-			while ((c = getchar()) != '\n' && c != EOF) { }
-		}
-	//supprimer le new line
-	port[strlen(port)-1] = '\0';
-
+	privileges = codeReponse;
+	// souhaiter la bienvenue (nous ne sommes pas des malotrues)
+	printf("\n\n"JAUNE" Bienvenue "RESET);
+	if (privileges == 5) {
+	printf(CYAN" super utilisateur"RESET);
 	}
-	// message pour indiquer la connexion en cours
-	printf("\n\nConnexion à %s:%s...\n\n",ip,port);
+	printf("\n");
 
-	//demande une connexion sur l'adresse localhost
-	if(InitialisationAvecService(ip,port) != 1) {
-		printf("Erreur d'initialisation\n");
-		return 1;
-	}
+	// tant que l'utilisateur ne souhaite pas quitter l'application
+	// afficher le menu et traiter le choix qu'il fait
+	do {
+	afficher_menu(privileges);
 
-	//tant qu'il recoit des messages du serveur
-	while((message = Reception()) != NULL ){
-		if(message != NULL) {
-			printf("%s\n", message);
-			//recup l'identifiant de requete
-			sscanf(message , "%[^ ]", message);
-
-			//si le serveur demande l'authentification
-			if(strcmp(message, "002")==0){
-				authentification();
-			}
-
-			//si le serveur confirme l'authentification d'un utilisateur
-			if(strcmp(message, "004")==0){
-				printf("Bienvenue\n");
-				afficher_menu(4);
-				choix_menu();
-			}
-
-			//si le serveur confirme l'authentification du Su
-			if(strcmp(message, "005")==0){
-				printf("Bienvenue Su\n");
-				afficher_menu(5);
-				choix_menu();
-			}
-
-			free(message);
-		} else {
-			printf("Erreur de reception\n");
-			return 1;
-		}
-	}
-
+	continuer = choix_menu(privileges);
+	system("clear");
+	} while (continuer != 1);
+		
+	// terminer la connexion
+	printf(VERT"\n\n\n On se quitte parfois pour mieux se retrouver ensuite.\n\n\n\n"RESET);
 	Terminaison();
-
 	return 0;
 }
