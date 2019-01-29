@@ -10,7 +10,7 @@ struct user{
 };
 
 //le super utilisateur
-struct user su = {"admin", "AdM!n"};
+struct user su = {"ad", "ad"};
 
 //verifie si l'utilisateur existe
 int is_user(char * login_mdp){
@@ -155,3 +155,33 @@ int editSu(char *donnee){
 	Emission("Les modifications ont bien ete prises en compte\n");
 	return 0;
 }
+
+/*Demande l'authentification au client*/
+int authentification(){
+	char * user;
+	//l'ecode est un code d'erreur
+	int ecode;
+	user = Reception();
+
+	//decoupe le message recu 
+	sscanf(user, "003 %[^\n]", user);
+	//verifie que l'utilisateur existe
+	ecode = is_user(user);
+	//si c'est un utilisateur lambda
+	if(ecode == 4){
+		Emission("004 auth OK\n");
+		return 1;
+	}
+	//si c'est le super utilisateur
+	if(ecode == 5){
+		Emission("005 auth su OK\n");
+		return 1;
+	}
+	// si login ou mdp ne sont pas bon renvoyer le code pour echec d'authentification
+	Emission("104 login et/ou mot de passe incorrect\n");
+
+	return 0;
+
+}
+
+

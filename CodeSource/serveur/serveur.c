@@ -144,39 +144,6 @@ int AttenteClient() {
 	return 1;
 }
 
-/*Demande l'authentification au client*/
-int authentification(){
-	char * user;
-	//l'ecode est un code d'erreur
-	int ecode;
-	//demande au client de s'identifier
-	Emission("002 authentification\n");
-
-	if((user = Reception()) == NULL){
-		printf("Erreur Reception\n");
-		return -1;
-	}
-
-	//decoupe le message recu 
-	sscanf(user, "003 %[^\n]", user);
-
-	//verifie que l'utilisateur existe
-	ecode = is_user(user);
-	//si c'est un utilisateur lambda
-	if(ecode == 4){
-		Emission("004 auth OK\n");
-		return 1;
-	}
-	//si c'est le super utilisateur
-	if(ecode == 5){
-		Emission("005 auth su OK\n");
-		return 1;
-	}
-
-	return 0;
-
-}
-
 /* Recoit un message envoye par le serveur.
  */
 char *Reception() {
@@ -199,6 +166,7 @@ char *Reception() {
 #ifdef WIN32
 			return _strdup(message);
 #else
+			
 			return strdup(message);
 #endif
 		} else {

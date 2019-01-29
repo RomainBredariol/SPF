@@ -22,23 +22,25 @@ int main() {
 		Emission("001 connexion etablie\n");
 
 		//demande l'authentification du client
-		if((ecode = authentification()) != 0){
-			while(fini != 1){
-				//message recu du client
-				message = Reception();
-				printf("j'ai recu : %s\n", message);
-				
-				if(message != NULL){
-					//execute la demande du client
-					executerRequete(message);
-				}else{
-					fini = 1;
-				}
+		// se repete tant que le code d'authentifiation est mauvais
+		Emission("002 demande d'authentification\n");
+		do {
+			ecode = authentification();
+		} while (ecode == 0);
+		
+		// executer les requetes reçues
+		while(fini != 1){
+			//message recu du client
+			message = Reception();
+			printf("j'ai recu : %s\n", message);
+			
+			if(message != NULL){
+				//execute la demande du client
+				executerRequete(message);
+			}else{
+				fini = 1;
 			}
-		}else{
-			printf("Erreur d'authentification\n");
 		}
-
 		//on ferme la connection
 		TerminaisonClient();
 	}

@@ -37,8 +37,11 @@ int main() {
 	do {
 		codeReponse = authentification();
 		compteurConnexion--;
-	} while (codeReponse != 0 && codeReponse == 105);
-	if (codeReponse == 105) {
+		if (codeReponse == 104 || codeReponse == 105) {
+			printf(JAUNE"\nLogin / mdp incorrect \n"RESET);
+		}
+	} while (compteurConnexion != 0 && (codeReponse == 105 || codeReponse == 104));
+	if (codeReponse == 105 || codeReponse == 104) {
 		printf("echec d'authentification au bout de 3 essais \n");
 		return -1;
 	}

@@ -15,3 +15,7 @@ int delUser();
 
 //edition du super utilisateur
 int editSu(char *donnee);
+
+/*Demande l'authentification au client*/
+int authentification();
+
