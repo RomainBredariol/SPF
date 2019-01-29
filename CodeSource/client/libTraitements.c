@@ -113,34 +113,31 @@ int delUser(){
 	return 0;
 }
 
+//lire permet de recuperer une chaine de caractere dans le buffer stdin
+int lire(char *chaine, int size){
+	char c;
+	fgets(chaine, size+1, stdin);
+
+	// vider le stdin si l'utilisateur depasse
+	if (chaine[size - 2] != '\0') {
+		while ((c = getchar()) != '\n' && c != EOF) { }
+	} else {
+		//sinon supprimer le new line
+		chaine[strlen(chaine) - 1] = '\0';
+	}
+	return 0;
+}
+
 //lecture_login_mdp permet de recuperer le login et le mdp dans le buffer stdin
 int lecture_login_mdp(char *login, char *mdp){
-	char c; 		// char pour vider le stdin
-
+	//recuperation login
 	printf("login :\n");
-	
-	//recuperation du login
-	fgets(login, 100, stdin);
-	
-	// vider le stdin si l'utilisateur depasse
-	if (login[99] != '\0') {
-		while ((c = getchar()) != '\n' && c != EOF) { }
-	} else {
-		//sinon supprimer le new line
-		login[strlen(login)-1] = '\0';
-	}
+	lire(login, 100);	
 
+	//recuperation mdp
 	printf("password :\n");
-	//recuperation du mdp
-	fgets(mdp, 100, stdin);
+	lire(mdp, 100);	
 
-	// vider le stdin si l'utilisateur depasse
-	if (mdp[99] != '\0') {
-		while ((c = getchar()) != '\n' && c != EOF) { }
-	} else {
-		//sinon supprimer le new line
-		mdp[strlen(mdp)-1] = '\0';
-	}
 	return 0;
 }
 
