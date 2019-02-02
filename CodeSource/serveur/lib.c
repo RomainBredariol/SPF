@@ -43,7 +43,7 @@ int is_user(char * login_mdp){
 		while(fscanf(user_list, "%s %s",login_test, mdp_test) != EOF){ 
 
 			if(strcmp(login_test, login)==0){
-				if(strcmp(login_test, login)==0){
+				if(strcmp(mdp_test, mdp)==0){
 					//confirme qu'un utilisateur est identifie
 					return 4;
 				}else{
