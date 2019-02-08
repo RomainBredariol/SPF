@@ -117,7 +117,7 @@ int addUser(){
 	printf("Veuillez saisir le login et mdp de l'utilisateur a ajouter\n");
 	lecture_login_mdp(login, mdp);
 
-	sprintf(donnee,"205 7.1 %s %s\n", login, mdp);
+	sprintf(donnee,"6 %s %s\n", login, mdp);
 
 	Emission(donnee);
 	return 0;
@@ -129,11 +129,16 @@ int delUser(){
 	char mdp[100];		// chaine utilisé pour le mot de passe
 	char donnee[300];
 
+	memset(login, 0, 100);
+	memset(mdp, 0, 100);
+	memset(donnee, 0, 300);
+
+
 	// lecture des identifiants de l'utilisateur a jouter
 	printf("Veuillez saisir le login et le password l'utilisateur a supprimer\n");
 	lecture_login_mdp(login, mdp);
 	
-	sprintf(donnee,"205 7.2 %s %s\n", login, mdp);
+	sprintf(donnee,"25 %s %s\n", login, mdp);
 
 	Emission(donnee);
 	return 0;

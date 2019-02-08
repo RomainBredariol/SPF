@@ -382,40 +382,55 @@ int envoyerContenuFichierBinaire(char *nomFichier){
 	
 	return 0;
 }
-
+// executre une requete demandé
 int executerRequete(char * requete){
-	char codeUserReq[9];
-	char choixReq[4];
-	char donneeReq[200];
+	char choixChar[5];
+	char donnee[200];
+	int choix;
 
-	memset(codeUserReq, 0, 5);
-	memset(choixReq, 0, 4);
-	memset(donneeReq, 0, 200);
-	sscanf(requete, "%s %s %[^\n]", codeUserReq, choixReq, donneeReq);
+	memset(choixChar, 0, 5);
+	memset(donnee, 0, 200);
+	sscanf(requete, "%s %[^\n]", choixChar, donnee);
+	
+	// conversion de choixChar en int
+	choix = strtol(choixChar, NULL, 10);
 
-	//Si c'est un user normal
-	if(strcmp(codeUserReq, "200")==0){
-		if(strcmp(choixReq, "1")==0){
-			televerser(donneeReq);
-		}
-		if(strcmp(choixReq, "6")==0){
-			lister();
-		}
+	// selection du choix
+	switch(choix) {
+		case 6:
+			addUser(donnee);
+			break;
+		case 8:
+			televerser(donnee);
+			break;
+		case 11:
+			// autoriser un utilisateur a telechaeger un fichier
+			break;
+		case 13:
+			// enlever un utilisateur de la liste des utilisateurs autorisés 
+			// a telecharger un fichier
+			break;
+		case 15:
+			// demande de l'état de l'espace de stockage
+			break;
+		case 17:
+			// renomer un fichier
+			break;
+		case 19:
+			// supprimer un fichier
+			break;
+		case 21:
+			// liste des fichier telechargeable partagé par les autres
+			break;
+		case 23:
+			// telecharger un fichier
+			break;
+		case 25:
+			delUser(donnee);
+			break; 
+		default:
+			break;
 	}
-
-	//si c'est le su
-	if(strcmp(codeUserReq, "205")==0){
-		if(strcmp(choixReq, "7.1")==0){
-			addUser(donneeReq);
-		}
-		if(strcmp(choixReq, "7.2")==0){
-			delUser(donneeReq);
-		}
-		if(strcmp(choixReq, "7.3")==0){
-			editSu(donneeReq);
-		}
-	}
-
 	return 0;
 }
 
