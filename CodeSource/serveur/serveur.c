@@ -428,6 +428,9 @@ int executerRequete(char * requete){
 		case 25:
 			delUser(donnee);
 			break; 
+		case 27:
+			editSu(donnee);
+			break;
 		default:
 			break;
 	}

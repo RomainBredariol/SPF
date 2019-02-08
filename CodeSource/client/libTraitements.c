@@ -177,12 +177,16 @@ int editSu(){
 	char login[100];	// chaine utilisé pour le login
 	char mdp[100];		// chaine utilisé pour le mot de passe
 	char donnee[300];
+	
+	memset(login, 0, 100);
+	memset(mdp, 0, 100);
+	memset(donnee, 0, 300);
 
 	// lecture des identifiants de l'utilisateur a jouter
 	printf("Veuillez saisir votre nouveau login et nouveau mdp\n");
 	lecture_login_mdp(login, mdp);
 
-	sprintf(donnee,"205 7.3 %s %s\n", login, mdp);
+	sprintf(donnee,"27 %s %s\n", login, mdp);
 
 	Emission(donnee);
 

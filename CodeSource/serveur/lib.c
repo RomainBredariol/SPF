@@ -149,6 +149,9 @@ int addUser(char *donnee){
 int editSu(char *donnee){
 	char login[100], mdp[100];
 
+	memset(login, 0, 100);
+	memset(mdp, 0, 100);
+
 	sscanf(donnee, "%s %s", login, mdp);
 
 	strcpy(su.login, login);
