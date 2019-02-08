@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "client.h"
 #include "lib.h"
 
@@ -59,6 +60,9 @@ int main() {
 	afficher_menu(privileges);
 
 	continuer = choix_menu(privileges);
+	
+	//attente de 3 sec pour afficher d'eventuels messages a l'utilisateur
+	sleep(3);
 	system("clear");
 	} while (continuer != 1);
 		

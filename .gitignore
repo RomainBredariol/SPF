@@ -66,3 +66,7 @@ dkms.conf
 *.h~
 
 CodeSource/client/Makefile~
+
+*.txt~
+
+CodeSource/serveur/Makefile~

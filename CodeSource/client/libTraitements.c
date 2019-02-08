@@ -5,9 +5,30 @@
 #include "lib.h"
 #include "libTraitements.h"
 #include <unistd.h>
+#define MAX_PATH 260
 
 // televerser permet d'envoyer un fichier sur le serveur
 int televerser() {
+	char *fileName, *donnee;
+	int size;
+	fileName = malloc(sizeof(char));
+	donnee = malloc(sizeof(char));
+
+	printf("Veuillez entrer le nom du fichier a televerser sur le serveur\n");
+	printf("nom du fichier : ");
+	lire(fileName, MAX_PATH);
+	FILE * file = fopen(fileName, "r");
+	if(file == NULL){
+		printf("Erreur fopen %s\n", fileName);
+		return -1;
+	}
+	size = longueur_fichier(fileName);		
+	sprintf(donnee, "200 1 %s %i\n",fileName, size); 
+	Emission(donnee);
+
+	strcpy(donnee, lireContenuFichier(fileName));		
+	Emission(donnee);
+
 	return 0;
 }
 
@@ -31,8 +52,9 @@ int gererFichiers() {
 	return 0;
 }
 
-// listeFichiers
+// listeFichiers permet de lister les fichiers telechargeable
 int listeFichiers() {
+	Emission("200 6\n");
 	return 0;
 }
 

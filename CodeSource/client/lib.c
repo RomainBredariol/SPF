@@ -41,8 +41,8 @@ int connexion() {
 			while ((c = getchar()) != '\n' && c != EOF) { }
 		}
 
-	//supprimer le new line
-	ip[strlen(ip)-1] = '\0';
+		//supprimer le new line
+		ip[strlen(ip)-1] = '\0';
 	}
 
 	// demander le port
@@ -59,8 +59,8 @@ int connexion() {
 			while ((c = getchar()) != '\n' && c != EOF) { }
 		}
 
-	//supprimer le new line
-	port[strlen(port)-1] = '\0';
+		//supprimer le new line
+		port[strlen(port)-1] = '\0';
 
 	}
 
@@ -80,7 +80,7 @@ int connexion() {
 // renvoie un integer qui correspond au code message
 int lireReponse() {
 	char *message;		// un message echange entre le client et le serveur
-	
+
 	//boucle d'attente de lecture d'un message du serveur
 	message = Reception();	
 	if(message != NULL) {
@@ -124,7 +124,7 @@ int afficher_menu(int user){
 	printf("4 - Etat\n");
 	printf("5 - Gerer fichiers\n");
 	printf("6 - Liste fichiers telechargeable\n");
-	
+
 	//Si l'utilisateur est l'admin
 	if(user == 5){
 		printf("7 - Gestion des comptes\n");
@@ -189,3 +189,52 @@ int choix_menu(int user){
 	return 0;
 }
 
+/*Renvoie la taille du fichier demandé*/
+unsigned long longueur_fichier(char *nomFichier)
+{
+	unsigned int taille;
+
+	//ouverture du fichier demandé
+	FILE *fichier = fopen(nomFichier, "r");
+
+	//si l'ouverture échoue
+	if(fichier == NULL){
+		printf("Erreur fopen fichier\n");
+		return -1;
+	}
+
+	//place le pointeur fichier en fin de fichier
+	taille = fseek(fichier, 0, SEEK_END);
+
+	//si le fseek échoue
+	if(taille != 0){
+		printf("Erreur fseek\n");
+		return -1;
+	}else{
+		//renvoie la position en octets, ici la fin du fichier donc sa taille
+		return ftell(fichier);
+	}
+}
+
+char* lireContenuFichier(char *nomFichier){
+	/*      contenu est le contenu du fichier binaire à envoyer au client
+	 *                      taille est la longueur du fichier demande*/
+	char *contenu;
+	unsigned long taille = longueur_fichier(nomFichier);
+
+	contenu = malloc(taille);
+	FILE *fichier = fopen(nomFichier, "r");
+	//ouvre le fichier demande
+	if(fichier == NULL){
+		printf("Erreur ouverture fichier : %s\n", nomFichier);
+		return NULL;
+	}
+
+	//place le pointeur de fichier au debut du fichier
+	fseek(fichier, 0, SEEK_SET);
+	//lit le contenu du fichier
+	fread(contenu, taille, 1, fichier);
+
+	return contenu;
+}
+	                                                                                                                                                                              

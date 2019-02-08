@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "serveur.h"
+#include "lib.h"
+#define MAX_PATH 260
 
 //definit la structure d'un utilisateur 
 struct user{
@@ -51,8 +53,8 @@ int is_user(char * login_mdp){
 				}
 			}
 		}
+		fclose(user_list);	
 	}
-	
 	return 0;
 }
 
@@ -181,7 +183,53 @@ int authentification(){
 	Emission("104 login et/ou mot de passe incorrect\n");
 
 	return 0;
-
 }
 
+//un client veut televerser un fichier 
+int televerser(char *donnee){
+	char *fileName, *contenu;
+	int size;
+
+	fileName = malloc(sizeof(char));
+	contenu = malloc(sizeof(char));
+
+	sscanf(donnee, "%s %i", fileName, &size); 		
+
+	ReceptionBinaire(contenu, size);
+	ecrireContenuFichier(fileName, contenu, size);	
+	return 0;
+}
+
+//permet d'ecrire dans un fichier
+int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
+	char path[MAX_PATH];
+	strcpy(path, "depot/");
+	strcat(path, nomFichier);
+
+	FILE *fichier = fopen(path, "w");
+	if(fichier == NULL){
+		printf("Erreur fopen %s\n", nomFichier);
+		return -1;
+	}
+
+	int ecode = fwrite(contenu, 1, size, fichier); 
+        if(ecode == 0){
+        	printf("Erreur ecriture de donnee dans %s\n", nomFichier);
+        	return -1;
+	}
+	fclose(fichier);
+	return 0;
+}
+
+//permet de lister les fichiers telechargeble
+int lister(){
+	char *list = malloc(sizeof(char));
+	FILE *f = popen("ls depot/", "r");
+
+	fgets(list, 2000, f);
+
+	Emission(list);
+	pclose(f);
+	return 0;	
+}
 

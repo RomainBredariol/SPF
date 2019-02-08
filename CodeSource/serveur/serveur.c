@@ -391,7 +391,13 @@ int executerRequete(char * requete){
 	sscanf(requete, "%s %s %[^\n]", codeUser, choix, donnee);
 
 	//Si c'est un user normal
-	if(strcmp(codeUser, "204")==0){
+	if(strcmp(codeUser, "200")==0){
+		if(strcmp(choix, "1")==0){
+			televerser(donnee);
+		}
+		if(strcmp(choix, "6")==0){
+			lister();
+		}
 	}
 
 	//si c'est le su

@@ -19,3 +19,11 @@ int editSu(char *donnee);
 /*Demande l'authentification au client*/
 int authentification();
 
+//un client veut televerser un fichier 
+int televerser(char *donnee);
+
+//permet d'ecrire dans un fichier
+int ecrireContenuFichier(char* nomFichier, char *contenu, int size);
+
+//permet de lister les fichiers telechargeble
+int lister();
