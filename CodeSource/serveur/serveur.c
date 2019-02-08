@@ -384,32 +384,35 @@ int envoyerContenuFichierBinaire(char *nomFichier){
 }
 
 int executerRequete(char * requete){
-	char codeUser[5];
-	char choix[3];
-	char donnee[200];
+	char codeUserReq[9];
+	char choixReq[4];
+	char donneeReq[200];
 
-	sscanf(requete, "%s %s %[^\n]", codeUser, choix, donnee);
+	memset(codeUserReq, 0, 5);
+	memset(choixReq, 0, 4);
+	memset(donneeReq, 0, 200);
+	sscanf(requete, "%s %s %[^\n]", codeUserReq, choixReq, donneeReq);
 
 	//Si c'est un user normal
-	if(strcmp(codeUser, "200")==0){
-		if(strcmp(choix, "1")==0){
-			televerser(donnee);
+	if(strcmp(codeUserReq, "200")==0){
+		if(strcmp(choixReq, "1")==0){
+			televerser(donneeReq);
 		}
-		if(strcmp(choix, "6")==0){
+		if(strcmp(choixReq, "6")==0){
 			lister();
 		}
 	}
 
 	//si c'est le su
-	if(strcmp(codeUser, "205")==0){
-		if(strcmp(choix, "7.1")==0){
-			addUser(donnee);
+	if(strcmp(codeUserReq, "205")==0){
+		if(strcmp(choixReq, "7.1")==0){
+			addUser(donneeReq);
 		}
-		if(strcmp(choix, "7.2")==0){
-			delUser(donnee);
+		if(strcmp(choixReq, "7.2")==0){
+			delUser(donneeReq);
 		}
-		if(strcmp(choix, "7.3")==0){
-			editSu(donnee);
+		if(strcmp(choixReq, "7.3")==0){
+			editSu(donneeReq);
 		}
 	}
 

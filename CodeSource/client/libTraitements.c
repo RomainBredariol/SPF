@@ -109,6 +109,10 @@ int addUser(){
 	char mdp[100];		// chaine utilisé pour le mot de passe
 	char donnee[300];
 
+	memset(login, 0, 100);
+	memset(mdp, 0, 100);
+	memset(donnee, 0, 300);
+
 	// lecture des identifiants de l'utilisateur a jouter
 	printf("Veuillez saisir le login et mdp de l'utilisateur a ajouter\n");
 	lecture_login_mdp(login, mdp);
