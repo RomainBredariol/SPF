@@ -3,6 +3,11 @@
 #include <string.h>
 #include "serveur.h"
 #include "lib.h"
+#include <sys/types.h>
+#include <dirent.h>
+#include <sys/stat.h>
+
+
 #define MAX_PATH 260
 
 //definit la structure d'un utilisateur 
@@ -79,6 +84,28 @@ int lancerServeur() {
 	// enlever le new line a la fin de la chaine de caractere
 	port[strlen(port)-1] = '\0';
 	} 
+
+	//verifier que le fichier "users" contenant les login existe sinon le créer.
+	if (fopen("users","r") == NULL) {
+		printf("\nle fichiers d'identifiant n'existe pas...\ncréation du fichier...\n");
+		if (fopen("users","w") != NULL) {
+			printf("création du fichier users réussie\n");
+		}else{
+			printf("echec à la creation du fichiers users\n");
+			return 1;
+		}
+	}
+	// verifier que le dossier "data" existe, sinon le créer.
+	if (opendir("depot") == NULL) {
+		printf("\nle dossier de données \"depot\" n'existe pas...\ncréation du dossier...\n");
+		if (mkdir("depot",0777) == 0) {
+			printf("création du dossier depot réussie\n\n");
+		}else{
+			printf("echec à la creation du dossier depot\n\n");
+			return 1;
+		}
+	}
+	
 	// initialiser le serveur sur le port
 	InitialisationAvecService(port);
 	return 0;
