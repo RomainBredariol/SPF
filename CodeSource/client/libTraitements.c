@@ -11,23 +11,31 @@
 int televerser() {
 	char *fileName, *donnee;
 	int size;
-	fileName = malloc(sizeof(char));
-	donnee = malloc(sizeof(char));
+	fileName = malloc(MAX_PATH);
+	donnee = malloc(MAX_PATH+20);
 
 	printf("Veuillez entrer le nom du fichier a televerser sur le serveur\n");
 	printf("nom du fichier : ");
 	lire(fileName, MAX_PATH);
+
 	FILE * file = fopen(fileName, "r");
 	if(file == NULL){
 		printf("Erreur fopen %s\n", fileName);
 		return -1;
 	}
 	size = longueur_fichier(fileName);		
-	sprintf(donnee, "200 1 %s %i\n",fileName, size); 
+
+	sprintf(donnee, "008 %s %i\n",fileName, size); 
 	Emission(donnee);
 
+	donnee = realloc(donnee, size);
+
 	strcpy(donnee, lireContenuFichier(fileName));		
-	Emission(donnee);
+	EmissionBinaire(donnee, size);
+	lireReponse();
+
+	free(fileName);
+	free(donnee);
 
 	return 0;
 }
@@ -81,7 +89,6 @@ int gestionComptes() {
 		//sinon supprimer le new line
 		choixChar[1] = '\0';
 	}
-	//scanf("%s", choix);
 	
 	choix = strtol(choixChar, NULL, 10);
 	printf("utilisateur choisi : %d \n",choix);
@@ -120,6 +127,7 @@ int addUser(){
 	sprintf(donnee,"6 %s %s\n", login, mdp);
 
 	Emission(donnee);
+	lireReponse();
 	return 0;
 }
 
@@ -141,6 +149,7 @@ int delUser(){
 	sprintf(donnee,"25 %s %s\n", login, mdp);
 
 	Emission(donnee);
+	lireReponse();
 	return 0;
 }
 
@@ -189,6 +198,7 @@ int editSu(){
 	sprintf(donnee,"27 %s %s\n", login, mdp);
 
 	Emission(donnee);
-
+	lireReponse();
 	return 0;
 }
+

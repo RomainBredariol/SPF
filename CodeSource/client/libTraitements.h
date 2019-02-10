@@ -41,3 +41,4 @@ int lecture_login_mdp(char *login, char *mdp);
 
 //lire permet de recuperer une chaine de caractere dans le buffer stdin
 int lire(char *chaine, int size);
+

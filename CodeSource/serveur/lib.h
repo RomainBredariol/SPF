@@ -27,3 +27,6 @@ int ecrireContenuFichier(char* nomFichier, char *contenu, int size);
 
 //permet de lister les fichiers telechargeble
 int lister();
+
+//extraitNomFichier permet de d'extraire le nom d'un fichier d'un chemin absolue
+char* extraitNomFichier(char *fileName);

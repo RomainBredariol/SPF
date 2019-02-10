@@ -70,3 +70,7 @@ CodeSource/client/Makefile~
 *.txt~
 
 CodeSource/serveur/Makefile~
+
+CodeSource/serveur/depot/
+
+CodeSource/serveur/users

@@ -7,7 +7,6 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-
 #define MAX_PATH 260
 
 //definit la structure d'un utilisateur 
@@ -117,7 +116,7 @@ int delUser(char *donnee){
 
 	strcat(donnee, "\n");
 
-	FILE * user_list = fopen("users", "r");
+	FILE * user_list     = fopen("users", "r");
 	FILE * user_list_tmp = fopen("users.tmp", "w");
 
 	if(user_list == NULL){
@@ -137,13 +136,13 @@ int delUser(char *donnee){
 			fputs(login_mdp, user_list_tmp);
 		}
 	}
-	
+
 	fclose(user_list);
 	fclose(user_list_tmp);
 
 	rename("users.tmp", "users");
 
-	Emission("L'utilisateur a ete supprime\n");
+	Emission("007 L'utilisateur a ete supprime\n");
 	return 0;
 }
 
@@ -168,7 +167,7 @@ int addUser(char *donnee){
 	
 	fclose(user_list);
 
-	Emission("L'utilisateur a ete cree\n");
+	Emission("007 L'utilisateur a ete cree\n");
 	return 0;
 }
 
@@ -184,7 +183,7 @@ int editSu(char *donnee){
 	strcpy(su.login, login);
 	strcpy(su.mdp, mdp);
 
-	Emission("Les modifications ont bien ete prises en compte\n");
+	Emission("007 Les modifications ont bien ete prises en compte\n");
 	return 0;
 }
 
@@ -217,17 +216,34 @@ int authentification(){
 
 //un client veut televerser un fichier 
 int televerser(char *donnee){
-	char *fileName, *contenu;
+	char *fileName, *contenu, *test;
 	int size;
 
-	fileName = malloc(sizeof(char));
-	contenu = malloc(sizeof(char));
+	fileName = malloc(MAX_PATH);
+	test = malloc(MAX_PATH);
 
 	sscanf(donnee, "%s %i", fileName, &size); 		
 
+	strcpy(test, extraitNomFichier(fileName));	
+
+	contenu = malloc(size);
+
 	ReceptionBinaire(contenu, size);
 	ecrireContenuFichier(fileName, contenu, size);	
+
+	free(fileName);
+	free(contenu);
 	return 0;
+}
+
+//extraitNomFichier permet de d'extraire le nom d'un fichier d'un chemin absolue
+char* extraitNomFichier(char *fileName){
+	char *ptr;
+	while((ptr = strstr(fileName, "/"))){
+		ptr = &ptr[1];
+		strcpy(fileName, ptr);
+	}
+	return fileName;
 }
 
 //permet d'ecrire dans un fichier
@@ -248,6 +264,7 @@ int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
         	return -1;
 	}
 	fclose(fichier);
+	Emission("007 le fichier a bien ete televerse\n");
 	return 0;
 }
 
@@ -260,6 +277,7 @@ int lister(){
 
 	Emission(list);
 	pclose(f);
+	free(list);
 	return 0;	
 }
 

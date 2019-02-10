@@ -61,8 +61,8 @@ int main() {
 
 	continuer = choix_menu(privileges);
 	
-	//attente de 3 sec pour afficher d'eventuels messages a l'utilisateur
-	sleep(3);
+	printf("appuyer sur Entree pour continuer\n");
+	getchar();
 	system("clear");
 	} while (continuer != 1);
 		
