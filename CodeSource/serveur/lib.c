@@ -164,7 +164,7 @@ int delUser(char *donnee){
 	strcat(command,user);
 	printf("command = %s\n",command);
 	system(command);
-	printf("Suppression de l'utilisateur de la liste des utilisateurs et suppression de son environnement\n")
+	printf("Suppression de l'utilisateur de la liste des utilisateurs et suppression de son environnement\n");
 
 	Emission("L'utilisateur a ete supprime\n");
 	return 0;

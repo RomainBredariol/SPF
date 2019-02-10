@@ -15,6 +15,8 @@
 #define CYAN "\x1b[36m"
 #define RESET "\x1b[0m"
 
+char nomUser[50];
+
 // connexion permet d'ouvrir une connexion avec le serveur, elle va demander l'ip et le port 
 // à l'utilisateur, si celui de rentre rien, une IP par defaut sera utilisé (localhost) et un
 // port par defaut sera utilisé (1337)
@@ -106,6 +108,9 @@ int authentification(){
 	printf("Veuillez vous identifier\n");
 
 	lecture_login_mdp(login, mdp);
+	memset(nomUser,0,50);
+	strcpy(nomUser,login);
+
 
 	//formatage de la chaine avec le bon id de requete
 	sprintf(donnee, "003 %s %s\n", login, mdp);

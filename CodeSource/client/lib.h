@@ -1,3 +1,5 @@
+extern char nomUser[50]; // nom de l'utilisateur accessible partout
+
 // connexion permet d'ouvrir une connexion avec le serveur, elle va demander l'ip et le port 
 // à l'utilisateur, si celui de rentre rien, une IP par defaut sera utilisé (localhost) et un
 // port par defaut sera utilisé (1337)
