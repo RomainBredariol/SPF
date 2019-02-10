@@ -263,21 +263,25 @@ int authentification(){
 
 //un client veut televerser un fichier 
 int televerser(char *donnee){
-	char *fileName, *contenu, *test;
+	char *fileName, *contenu;
 	int size;
 
 	fileName = malloc(MAX_PATH);
-	test = malloc(MAX_PATH);
 
+	//on scanne les donnees qui contiennent le nom de fichier et sa size
 	sscanf(donnee, "%s %i", fileName, &size); 		
 
-	strcpy(test, extraitNomFichier(fileName));	
+	//on extrait le nom du fichier dans le cas ou c'est un chemin absolue
+	extraitNomFichier(fileName);	
 
 	contenu = malloc(size);
 
+	//on recoit le fichier
 	ReceptionBinaire(contenu, size);
+	//on ecrit le fichier 
 	ecrireContenuFichier(fileName, contenu, size);	
 
+	//on libere les pointeurs
 	free(fileName);
 	free(contenu);
 	return 0;
@@ -310,7 +314,43 @@ int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
         	return -1;
 	}
 	fclose(fichier);
+
+	ajouterFichierListe(nomFichier);
+
 	Emission("007 le fichier a bien ete televerse\n");
+	return 0;
+}
+
+//on ecrit le nom du fichier et le nom de l'utilisateur a qui il appartient 
+//dans le fichier liste qui recense l'ensemble des fichiers du serveur
+int ajouterFichierListe(char* nomFichier){
+	char contenu[strlen(nomFichier)+105];
+	int ecode;
+	char liste_fichier[MAX_PATH];
+
+	FILE * fichier = fopen("depot/liste", "a+");
+	if(fichier == NULL){
+		printf("Erreur fopen liste\n");
+		return -1;
+	}
+
+	sprintf(contenu, "%s %s", nomFichier, nomUser);
+
+	if((fscanf(fichier, "%[^\n]", liste_fichier)) != EOF){
+		do{
+			if((strcmp(liste_fichier, contenu)) == 0){
+				return 0;
+			}
+		}while((fscanf(fichier, "%[^\n]", liste_fichier)));
+	}
+	strcat(contenu, "\n");
+	ecode = fwrite(contenu, 1, strlen(contenu), fichier); 
+	if(ecode == 0){
+		printf("Erreur ecriture de donnee dans liste\n");
+		return -1;
+	}
+
+	fclose(fichier);
 	return 0;
 }
 
