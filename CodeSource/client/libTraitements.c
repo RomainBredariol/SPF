@@ -284,7 +284,15 @@ int supprimerFichier() {
 	strcat(requete,reponse);
 	strcat(requete,"\n");
 	Emission(requete);
+	// lire la reponse du serveur
+	char *rep;
+	rep = Reception();
 
+	if(strcmp(rep,"007\n") == 0) {
+		printf("suppression du fichier réussie\n");
+	} else {
+		printf("suppresson impossible, nom de fichier incorrect\n");
+	}
 	
 	return 0;
 }

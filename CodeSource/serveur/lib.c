@@ -391,8 +391,32 @@ int supprimerFichier(char *donnee) {
 	strcat(command,nomUser);
 	strcat(command,"/");
 	strcat(command,donnee);
-	// executer la suppression
-	system(command);
+	//verifier que le fichier existe
+	DIR *d;
+     	struct dirent *dir;
+	char cheminUser[50];
+	int ok = 0;
+	memset(cheminUser,0,50);
+	strcpy(cheminUser,"depot/");
+	strcat(cheminUser,nomUser);
+     	d = opendir(cheminUser);
+     	if (d) {
+        	while ((dir = readdir(d)) != NULL){
+			if (strcmp(dir->d_name,".") != 0 && strcmp(dir->d_name,"..") != 0 && strcmp(dir->d_name,"autorisations")){
+				if (strcmp(dir->d_name,donnee) == 0) {
+					ok = 1;	
+				}
+			} 	
+        	}
+	}
+        closedir(d);
 
+	// executer la suppression si elle est possible
+	if (ok) {
+		system(command);
+		Emission("007\n");
+	} else {
+		Emission("202\n");
+	}
 	return 0;
 }
