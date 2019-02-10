@@ -403,6 +403,9 @@ int executerRequete(char * requete){
 		case 8:
 			televerser(donnee);
 			break;
+		case 10:
+			lister(donnee);
+			break;
 		case 11:
 			// autoriser un utilisateur a telechaeger un fichier
 			break;

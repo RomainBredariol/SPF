@@ -312,7 +312,7 @@ int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
 }
 
 //permet de lister les fichiers telechargeble
-int lister(){
+int lister(char *donnee){
 	char *list = malloc(sizeof(char));
 	FILE *f = popen("ls depot/", "r");
 

@@ -26,7 +26,7 @@ int televerser(char *donnee);
 int ecrireContenuFichier(char* nomFichier, char *contenu, int size);
 
 //permet de lister les fichiers telechargeble
-int lister();
+int lister(char *donnee);
 
 //extraitNomFichier permet de d'extraire le nom d'un fichier d'un chemin absolue
 char* extraitNomFichier(char *fileName);

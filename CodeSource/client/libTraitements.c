@@ -62,7 +62,17 @@ int gererFichiers() {
 
 // listeFichiers permet de lister les fichiers telechargeable
 int listeFichiers() {
-	Emission("200 6\n");
+	char requet[50];
+	memset(requet,0,50);
+	strcpy(requet,"10 ");
+	strcat(requet,nomUser);
+	strcat(requet,"\n");
+
+	Emission(requet);
+	//recevoir les données
+	printf("appuyer sur entrée pour continuer\n");
+	getchar();
+	
 	return 0;
 }
 
