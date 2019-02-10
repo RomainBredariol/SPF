@@ -407,7 +407,7 @@ int executerRequete(char * requete){
 			lister(donnee);
 			break;
 		case 11:
-			// autoriser un utilisateur a telechaeger un fichier
+			addDroits(donnee);
 			break;
 		case 13:
 			// enlever un utilisateur de la liste des utilisateurs autorisés 

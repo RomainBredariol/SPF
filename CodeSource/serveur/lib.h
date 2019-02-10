@@ -44,3 +44,5 @@ int supprimerFichier(char *donnee);
 // fonction qui modifier le nom d'un fichier du serveur
 int renommerFichier(char *donnee);
 
+// fonction qui permet d'autoriser un utilisateur à telecharger un fichier
+int addDroits(char *donnee);

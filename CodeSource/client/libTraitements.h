@@ -47,3 +47,10 @@ int supprimerFichier();
 
 // fonction qui permet à l'utilisateur de renomer un fichier de son environnement
 int renommerFichier();
+
+// autoriser un utilisateur à pouvoir telecharger un de nos fichiers
+int addDroits();
+
+// revoquer les droits d'un utilisateur à telecharger un fichier
+int delDroits();
+

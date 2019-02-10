@@ -60,6 +60,42 @@ int telecharger() {
 
 // autorisations permet de ?????
 int autorisations() {
+	char choixChar[3];		// choix sous forme de chaine
+	char c; 			// char pour vider le stdin
+	int choix;			// choix transformé en int
+
+	system("clear");
+	printf("=========================================\n");
+	printf("1 - Autoriser un utilisateur à télécharger un fichier\n");
+	printf("2 - Revoquer les droits d'un utilisateur à télécharger un fichier\n");
+	printf("0 - Retour au menu principal\n");
+
+	printf("Veuillez entre le numero de l'option souhaitee :\n");
+	fgets(choixChar, 3, stdin);
+
+	// vider le stdin si l'utilisateur depasse
+	if (choixChar[2] != '\0') {
+		while ((c = getchar()) != '\n' && c != EOF) { }
+	} else {
+		//sinon supprimer le new line
+		choixChar[1] = '\0';
+	}
+	
+	choix = strtol(choixChar, NULL, 10);
+
+	switch(choix){
+		case 1:
+			addDroits();
+			break;
+		case 2:
+			delDroits();
+			break;
+		case 0: 
+			return 0;
+			break;
+		default:
+			break;
+	}
 	return 0;
 }
 
@@ -78,7 +114,6 @@ int gererFichiers() {
 	printf("=========================================\n");
 	printf("1 - Supprimer fichier\n");
 	printf("2 - Renommer fichier\n");
-	printf("3 - ???\n");
 	printf("0 - Retour au menu principal\n");
 
 	printf("Veuillez entre le numero de l'option souhaitee :\n");
@@ -93,7 +128,6 @@ int gererFichiers() {
 	}
 	
 	choix = strtol(choixChar, NULL, 10);
-	printf("utilisateur choisi : %d \n",choix);
 
 	switch(choix){
 		case 1:
@@ -102,11 +136,10 @@ int gererFichiers() {
 		case 2:
 			renommerFichier();
 			break;
-		case 3:
-			// ???
-			break;
 		case 0: 
 			return 0;
+			break;
+		default:
 			break;
 	}
 	return 0;
@@ -335,4 +368,47 @@ int renommerFichier() {
 	return 0;
 }
 
+// autoriser un utilisateur à pouvoir telecharger un de nos fichiers
+int addDroits() {
 
+	// lister les fichier pour savoir quoi pouvoir supprimer
+	listeFichiers();
+	printf("\nSelectionner un fichier à partager\n\n");
+
+	// lire la reponse de l'utilisateur et commencer a forger la requete
+	char reponse[50];
+	memset(reponse,0,50);
+	char requete[60];
+	memset(requete,0,60);
+
+	lire(reponse,50);
+	strcpy(requete,"11 ");
+	strcat(requete,reponse);
+
+	// demander le nouveau nom de fichier et finir de forger la requete
+	printf("Quel est le nom de l'utilisateur ?\n");
+	memset(reponse,0,50);
+	lire(reponse,50);
+	strcat(requete," ");
+	strcat(requete,reponse);
+	strcat(requete,"\n");
+	Emission(requete);
+
+	// lire la reponse du serveur
+	char *rep;
+	rep = Reception();
+
+	if(strcmp(rep,"007\n") == 0) {
+		printf("utilisateur autorisé avec succés\n");
+	} else {
+		printf("autorisation impossible (nom de fichier ou utilisateur inexistant)\n");
+	}
+	
+	return 0;
+}
+
+// revoquer les droits d'un utilisateur à telecharger un fichier
+int delDroits() {
+
+	return 0;
+}

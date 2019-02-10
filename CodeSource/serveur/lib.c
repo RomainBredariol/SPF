@@ -468,3 +468,59 @@ int renommerFichier(char *donnee) {
 	}
 	return 0;
 }
+// fonction qui permet d'autoriser un utilisateur à telecharger un fichier
+int addDroits(char *donnee) {
+	
+	// séparer utilisateur et nom de fichier de la requete
+	char utilisateur[50];
+	char fichier[50];
+	memset(utilisateur,0,50);
+	memset(fichier,0,50);
+	sscanf(donnee,"%[^ ] %[^ ]",fichier,utilisateur);
+	//verifier que le fichier existe
+	DIR *d;
+     	struct dirent *dir;
+	char cheminUser[50];
+	int ok = 0;
+	memset(cheminUser,0,50);
+	strcpy(cheminUser,"depot/");
+	strcat(cheminUser,nomUser);
+     	d = opendir(cheminUser);
+     	if (d) {
+        	while ((dir = readdir(d)) != NULL){
+			if (strcmp(dir->d_name,".") != 0 && strcmp(dir->d_name,"..") != 0 && strcmp(dir->d_name,"autorisations")){
+				if (strcmp(dir->d_name,fichier) == 0) {
+					ok = 1;	
+				}
+			} 	
+        	}
+	}
+        closedir(d);
+
+	// si le fichier n'existe pas envoyer un message d'erreur
+	if (!ok) {
+		Emission("202\n");
+		return 1;
+	}
+	// verifier si l'utilisateur existe (si son dossier existe)
+	memset(cheminUser,0,50);
+	sprintf(cheminUser,"depot/%s",utilisateur);
+	if (opendir(cheminUser) == NULL) {
+		// si l'utilisateur n'existe pas envoyer un message d'erreur
+		Emission("202\n");
+		return 1;
+	}
+	// autoriser l'utilisateur
+	// ouvrir le fichier
+	strcat(cheminUser,"/autorisations");
+	FILE *f = fopen(cheminUser,"a");
+	if (f != NULL) { printf("fichier ouvert %s\n",cheminUser); }
+	// ecrire dans le fichier
+	memset(cheminUser,0,50);
+	sprintf(cheminUser,"../%s/%s\n",nomUser,fichier);
+	fputs(cheminUser,f);
+	fclose(f);
+	// envoyer un message pour OK
+	Emission("007\n");
+	return 0;
+}
