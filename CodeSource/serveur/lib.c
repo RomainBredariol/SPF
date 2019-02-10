@@ -153,6 +153,19 @@ int delUser(char *donnee){
 
 	rename("users.tmp", "users");
 
+	// suppression du dossier de l'utilisateur et de son contenu
+	char user[50];
+	char command[100];
+	memset(user,0,50);
+	memset(command,0,100);
+	sscanf(donnee,"%[^ ]",user);
+	printf("user = %s\n", user);
+	strcpy(command,"rm -rf depot/");
+	strcat(command,user);
+	printf("command = %s\n",command);
+	system(command);
+	printf("Suppression de l'utilisateur de la liste des utilisateurs et suppression de son environnement\n")
+
 	Emission("L'utilisateur a ete supprime\n");
 	return 0;
 }
@@ -186,7 +199,6 @@ int addUser(char *donnee){
 
 	// verifier que le fichier data/liste existe sinon le créer
 	sscanf(donnee,"%[^ ]",user);
-	printf("user = %s \n",user);
 	strcpy(addresseDossierUser,"depot/");
 	strcat(addresseDossierUser,user);
 
