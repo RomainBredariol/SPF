@@ -335,10 +335,23 @@ int lister(){
         	}
         closedir(d);
 	strcat(reponse,"\n");
-	printf("reponse : %s \n",reponse);
 	Emission(reponse);
      	}
 
 	return 0;	
 }
 
+// fonction qui supprimer un fichier du serveur
+int supprimerFichier(char *donnee) {
+	// forger la commande de suppression du fichier
+	char command[50];
+	memset(command,0,50);
+	strcpy(command,"rm depot/");
+	strcat(command,nomUser);
+	strcat(command,"/");
+	strcat(command,donnee);
+	// executer la suppression
+	system(command);
+
+	return 0;
+}

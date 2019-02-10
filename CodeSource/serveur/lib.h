@@ -32,3 +32,7 @@ int lister();
 
 //extraitNomFichier permet de d'extraire le nom d'un fichier d'un chemin absolue
 char* extraitNomFichier(char *fileName);
+
+// fonction qui supprimer un fichier du serveur
+int supprimerFichier(char *donnee);
+	

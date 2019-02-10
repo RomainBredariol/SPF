@@ -69,6 +69,45 @@ int etat() {
 
 // gererFichiers  permets de ???? 
 int gererFichiers() {
+	char choixChar[3];		// choix sous forme de chaine
+	char c; 			// char pour vider le stdin
+	int choix;			// choix transformé en int
+
+	system("clear");
+	printf("=========================================\n");
+	printf("1 - Supprimer fichier\n");
+	printf("2 - Renommer fichier\n");
+	printf("3 - ???\n");
+	printf("0 - Retour au menu principal\n");
+
+	printf("Veuillez entre le numero de l'option souhaitee :\n");
+	fgets(choixChar, 3, stdin);
+
+	// vider le stdin si l'utilisateur depasse
+	if (choixChar[2] != '\0') {
+		while ((c = getchar()) != '\n' && c != EOF) { }
+	} else {
+		//sinon supprimer le new line
+		choixChar[1] = '\0';
+	}
+	
+	choix = strtol(choixChar, NULL, 10);
+	printf("utilisateur choisi : %d \n",choix);
+
+	switch(choix){
+		case 1:
+			supprimerFichier();
+			break;
+		case 2:
+			renommerFichier();
+			break;
+		case 3:
+			// ???
+			break;
+		case 0: 
+			return 0;
+			break;
+	}
 	return 0;
 }
 
@@ -226,4 +265,33 @@ int editSu(){
 	lireReponse();
 	return 0;
 }
+
+
+// fonction qui permet a l'utilisateur de supprimer une fichier de son environnement
+int supprimerFichier() {
+	// lister les fichier pour savoir quoi pouvoir supprimer
+	listeFichiers();
+	printf("\nQuel fichier voulez vous supprimer?\n\n");
+	// lire la reponse de l'utilisateur
+	char reponse[50];
+	memset(reponse,0,50);
+	lire(reponse,50);
+	// envoyer la requete de suppression
+	char requete[60];
+	memset(requete,0,60);
+	strcpy(requete,"19 ");
+	strcat(requete,reponse);
+	strcat(requete,"\n");
+	Emission(requete);
+
+	
+	return 0;
+}
+
+// fonction qui permet à l'utilisateur de renomer un fichier de son environnement
+int renommerFichier() {
+
+	return 0;
+}
+
 
