@@ -419,3 +419,51 @@ int supprimerFichier(char *donnee) {
 	}
 	return 0;
 }
+
+// fonction qui modifier le nom d'un fichier du serveur
+int renommerFichier(char *donnee) {
+	// forger la commande de modificiation du nom du fichier
+	char command[50];
+	memset(command,0,50);
+	strcpy(command,"mv depot/");
+	strcat(command,nomUser);
+	strcat(command,"/");
+	char fichierInit[50];
+	char fichierFin[50];
+	memset(fichierInit,0,50);
+	memset(fichierFin,0,50);
+	sscanf(donnee,"%[^ ] %[^ ]",fichierInit,fichierFin);
+	strcat(command,fichierInit);
+	strcat(command," depot/");
+	strcat(command,nomUser);
+	strcat(command,"/");
+	strcat(command,fichierFin);
+	//verifier que le fichier existe
+	DIR *d;
+     	struct dirent *dir;
+	char cheminUser[50];
+	int ok = 0;
+	memset(cheminUser,0,50);
+	strcpy(cheminUser,"depot/");
+	strcat(cheminUser,nomUser);
+     	d = opendir(cheminUser);
+     	if (d) {
+        	while ((dir = readdir(d)) != NULL){
+			if (strcmp(dir->d_name,".") != 0 && strcmp(dir->d_name,"..") != 0 && strcmp(dir->d_name,"autorisations")){
+				if (strcmp(dir->d_name,fichierInit) != 0 && strcmp(dir->d_name,fichierFin) != 0) {
+					ok = 1;	
+				}
+			} 	
+        	}
+	}
+        closedir(d);
+
+	// executer la suppression si elle est possible
+	if (ok) {
+		system(command);
+		Emission("007\n");
+	} else {
+		Emission("202\n");
+	}
+	return 0;
+}

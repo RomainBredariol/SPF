@@ -41,3 +41,6 @@ int ajouterFichierListe(char* nomFichier);
 // fonction qui supprimer un fichier du serveur
 int supprimerFichier(char *donnee);
 	
+// fonction qui modifier le nom d'un fichier du serveur
+int renommerFichier(char *donnee);
+

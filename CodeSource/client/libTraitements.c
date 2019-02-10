@@ -298,7 +298,39 @@ int supprimerFichier() {
 
 // fonction qui permet à l'utilisateur de renomer un fichier de son environnement
 int renommerFichier() {
+	// lister les fichier pour savoir quoi pouvoir supprimer
+	listeFichiers();
+	printf("\nQuel fichier voulez vous renomer ?\n\n");
 
+	// lire la reponse de l'utilisateur et commencer a forger la requete
+	char reponse[50];
+	memset(reponse,0,50);
+	char requete[60];
+	memset(requete,0,60);
+
+	lire(reponse,50);
+	strcpy(requete,"17 ");
+	strcat(requete,reponse);
+
+	// demander le nouveau nom de fichier et finir de forger la requete
+	printf("Quel est le nom du nouveau fichier ?\n");
+	memset(reponse,0,50);
+	lire(reponse,50);
+	strcat(requete," ");
+	strcat(requete,reponse);
+	strcat(requete,"\n");
+	Emission(requete);
+
+	// lire la reponse du serveur
+	char *rep;
+	rep = Reception();
+
+	if(strcmp(rep,"007\n") == 0) {
+		printf("fichier renommé avec succés\n");
+	} else {
+		printf("modification impossible, nom du fichier incorrect un fichier porte deja ce nom\n");
+	}
+	
 	return 0;
 }
 

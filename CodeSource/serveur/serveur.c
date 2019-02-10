@@ -417,7 +417,7 @@ int executerRequete(char * requete){
 			// demande de l'état de l'espace de stockage
 			break;
 		case 17:
-			// renomer un fichier
+			renommerFichier(donnee);
 			break;
 		case 19:
 			supprimerFichier(donnee);

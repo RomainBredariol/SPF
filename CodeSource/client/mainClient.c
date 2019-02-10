@@ -47,6 +47,7 @@ int main() {
 		return -1;
 	}
 	privileges = codeReponse;
+	system("clear");
 	// souhaiter la bienvenue (nous ne sommes pas des malotrues)
 	printf("\n\n"JAUNE" Bienvenue "RESET);
 	if (privileges == 5) {
