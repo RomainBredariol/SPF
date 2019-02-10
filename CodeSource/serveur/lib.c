@@ -9,6 +9,8 @@
 
 #define MAX_PATH 260
 
+char nomUser[100];
+
 //definit la structure d'un utilisateur 
 struct user{
 	char login [100];
@@ -33,6 +35,7 @@ int is_user(char * login_mdp){
 	if(strcmp(su.login, login)==0){
 		if(strcmp(su.mdp, mdp)==0){
 			//confirme que le su est identifie
+			strcpy(nomUser, su.login);
 			return 5;
 		}else{
 			printf("Mauvais mdp\n");
@@ -51,6 +54,7 @@ int is_user(char * login_mdp){
 			if(strcmp(login_test, login)==0){
 				if(strcmp(mdp_test, mdp)==0){
 					//confirme qu'un utilisateur est identifie
+					strcpy(nomUser, login);
 					return 4;
 				}else{
 					printf("Mauvais mdp\n");
@@ -292,8 +296,7 @@ char* extraitNomFichier(char *fileName){
 //permet d'ecrire dans un fichier
 int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
 	char path[MAX_PATH];
-	strcpy(path, "depot/");
-	strcat(path, nomFichier);
+	sprintf(path, "depot/%s/%s", nomUser, nomFichier);
 
 	FILE *fichier = fopen(path, "w");
 	if(fichier == NULL){

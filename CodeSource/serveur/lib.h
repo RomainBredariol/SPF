@@ -1,3 +1,5 @@
+extern char nomUser[100]; // nom de l'utilisateur accessible partout
+
 // is_user vérifie sir l'utilisateur existe et si son 
 // mot de passe est correcte
 int is_user(char * login_mdp);
