@@ -315,15 +315,30 @@ int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
 }
 
 //permet de lister les fichiers telechargeble
-int lister(char *donnee){
-	char *list = malloc(sizeof(char));
-	FILE *f = popen("ls depot/", "r");
+int lister(){
 
-	fgets(list, 2000, f);
+	DIR *d;
+     	struct dirent *dir;
+	char cheminUser[50];
+	char reponse[1000];
+	memset(reponse,0,1000);
+	memset(cheminUser,0,50);
+	strcpy(cheminUser,"depot/");
+	strcat(cheminUser,nomUser);
+     	d = opendir(cheminUser);
+     	if (d) {
+        	while ((dir = readdir(d)) != NULL){
+			if (strcmp(dir->d_name,".") != 0 && strcmp(dir->d_name,"..") != 0 && strcmp(dir->d_name,"autorisations")){
+				strcat(reponse,dir->d_name);
+				strcat(reponse,":");
+			} 	
+        	}
+        closedir(d);
+	strcat(reponse,"\n");
+	printf("reponse : %s \n",reponse);
+	Emission(reponse);
+     	}
 
-	Emission(list);
-	pclose(f);
-	free(list);
 	return 0;	
 }
 

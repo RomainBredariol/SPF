@@ -7,6 +7,18 @@
 #include <unistd.h>
 #define MAX_PATH 260
 
+
+// codes couleurs pour printf
+#define ROUGE "\x1b[31m"
+#define VERT "\x1b[32m"
+#define JAUNE "\x1b[33m"
+#define BLEU "\x1b[34m"
+#define MAGENTA "\x1b[35m"
+#define CYAN "\x1b[36m"
+#define RESET "\x1b[0m"
+
+
+
 // televerser permet d'envoyer un fichier sur le serveur
 int televerser() {
 	char *fileName, *donnee;
@@ -62,16 +74,19 @@ int gererFichiers() {
 
 // listeFichiers permet de lister les fichiers telechargeable
 int listeFichiers() {
-	char requet[50];
-	memset(requet,0,50);
-	strcpy(requet,"10 ");
-	strcat(requet,nomUser);
-	strcat(requet,"\n");
 
-	Emission(requet);
+	Emission("10 \n");
 	//recevoir les données
-	printf("appuyer sur entrée pour continuer\n");
-	getchar();
+	char *rep;
+	rep = Reception();
+	printf("\n\nLISTE DES FICHIERS TELECHARGEABLES\n\n");
+	for (int i = 0 ; i < strlen(rep); i++ ) {
+		if (rep[i] != ':') {
+			printf(BLEU"%c"RESET,rep[i]);
+		} else {
+			printf("\n");
+		}	
+	}
 	
 	return 0;
 }
