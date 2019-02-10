@@ -105,6 +105,16 @@ int lancerServeur() {
 			return 1;
 		}
 	}
+	// verifier que le fichier data/liste existe sinon le créer
+	if (fopen("depot/liste","r") == NULL) {
+		printf("\nle fichiers data/liste (liste des fichiers et de leur propriétaires)n'existe pas...\ncréation du fichier...\n");
+		if (fopen("depot/liste","w") != NULL) {
+			printf("création du fichier liste réussie\n");
+		}else{
+			printf("echec à la creation du fichiers liste\n");
+			return 1;
+		}
+	}
 	
 	// initialiser le serveur sur le port
 	InitialisationAvecService(port);
@@ -150,6 +160,12 @@ int delUser(char *donnee){
 //ajoute un utilisateur a la liste
 int addUser(char *donnee){
 	int ecode; //error code
+	char user[50];
+	char addresseDossierUser[80];
+
+	memset(user,0,50);
+	memset(addresseDossierUser,0,80);
+	
 
 	FILE * user_list = fopen("users", "a");
 
@@ -168,6 +184,21 @@ int addUser(char *donnee){
 	
 	fclose(user_list);
 
+	// verifier que le fichier data/liste existe sinon le créer
+	sscanf(donnee,"%[^ ]",user);
+	printf("user = %s \n",user);
+	strcpy(addresseDossierUser,"depot/");
+	strcat(addresseDossierUser,user);
+
+	printf("adresseDossierUser = %s \n",addresseDossierUser);
+	if (mkdir(addresseDossierUser,0777) == 0) {	
+		printf("création du dossier d'utilisateur\n");
+	strcat(addresseDossierUser,"/autorisations");
+	}	
+	if (fopen(addresseDossierUser,"w") != NULL) {
+			printf("création du fichier d'autorisations de l'utilisateur\n");
+	}
+	
 	Emission("L'utilisateur a ete cree\n");
 	return 0;
 }
