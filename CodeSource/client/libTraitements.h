@@ -42,3 +42,8 @@ int lecture_login_mdp(char *login, char *mdp);
 //lire permet de recuperer une chaine de caractere dans le buffer stdin
 int lire(char *chaine, int size);
 
+// fonction qui permet a l'utilisateur de supprimer une fichier de son environnement
+int supprimerFichier();
+
+// fonction qui permet à l'utilisateur de renomer un fichier de son environnement
+int renommerFichier();

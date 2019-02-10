@@ -7,6 +7,18 @@
 #include <unistd.h>
 #define MAX_PATH 260
 
+
+// codes couleurs pour printf
+#define ROUGE "\x1b[31m"
+#define VERT "\x1b[32m"
+#define JAUNE "\x1b[33m"
+#define BLEU "\x1b[34m"
+#define MAGENTA "\x1b[35m"
+#define CYAN "\x1b[36m"
+#define RESET "\x1b[0m"
+
+
+
 // televerser permet d'envoyer un fichier sur le serveur
 int televerser() {
 	char *fileName, *donnee;
@@ -57,21 +69,63 @@ int etat() {
 
 // gererFichiers  permets de ???? 
 int gererFichiers() {
+	char choixChar[3];		// choix sous forme de chaine
+	char c; 			// char pour vider le stdin
+	int choix;			// choix transformé en int
+
+	system("clear");
+	printf("=========================================\n");
+	printf("1 - Supprimer fichier\n");
+	printf("2 - Renommer fichier\n");
+	printf("3 - ???\n");
+	printf("0 - Retour au menu principal\n");
+
+	printf("Veuillez entre le numero de l'option souhaitee :\n");
+	fgets(choixChar, 3, stdin);
+
+	// vider le stdin si l'utilisateur depasse
+	if (choixChar[2] != '\0') {
+		while ((c = getchar()) != '\n' && c != EOF) { }
+	} else {
+		//sinon supprimer le new line
+		choixChar[1] = '\0';
+	}
+	
+	choix = strtol(choixChar, NULL, 10);
+	printf("utilisateur choisi : %d \n",choix);
+
+	switch(choix){
+		case 1:
+			supprimerFichier();
+			break;
+		case 2:
+			renommerFichier();
+			break;
+		case 3:
+			// ???
+			break;
+		case 0: 
+			return 0;
+			break;
+	}
 	return 0;
 }
 
 // listeFichiers permet de lister les fichiers telechargeable
 int listeFichiers() {
-	char requet[50];
-	memset(requet,0,50);
-	strcpy(requet,"10 ");
-	strcat(requet,nomUser);
-	strcat(requet,"\n");
 
-	Emission(requet);
+	Emission("10 \n");
 	//recevoir les données
-	printf("appuyer sur entrée pour continuer\n");
-	getchar();
+	char *rep;
+	rep = Reception();
+	printf("\n\nLISTE DES FICHIERS TELECHARGEABLES\n\n");
+	for (int i = 0 ; i < strlen(rep); i++ ) {
+		if (rep[i] != ':') {
+			printf(BLEU"%c"RESET,rep[i]);
+		} else {
+			printf("\n");
+		}	
+	}
 	
 	return 0;
 }
@@ -211,4 +265,33 @@ int editSu(){
 	lireReponse();
 	return 0;
 }
+
+
+// fonction qui permet a l'utilisateur de supprimer une fichier de son environnement
+int supprimerFichier() {
+	// lister les fichier pour savoir quoi pouvoir supprimer
+	listeFichiers();
+	printf("\nQuel fichier voulez vous supprimer?\n\n");
+	// lire la reponse de l'utilisateur
+	char reponse[50];
+	memset(reponse,0,50);
+	lire(reponse,50);
+	// envoyer la requete de suppression
+	char requete[60];
+	memset(requete,0,60);
+	strcpy(requete,"19 ");
+	strcat(requete,reponse);
+	strcat(requete,"\n");
+	Emission(requete);
+
+	
+	return 0;
+}
+
+// fonction qui permet à l'utilisateur de renomer un fichier de son environnement
+int renommerFichier() {
+
+	return 0;
+}
+
 

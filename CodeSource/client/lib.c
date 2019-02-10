@@ -157,7 +157,6 @@ int choix_menu(int user){
 	}
 	// convertir le choixChar en choix (int)
 	choix = strtol(choixChar, NULL, 10);
-	printf("utilisateur choisi : %d \n",choix);
 
 	// executer le traitement en fonction du choix de l'utilisateur
 	switch(choix) {

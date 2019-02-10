@@ -420,7 +420,7 @@ int executerRequete(char * requete){
 			// renomer un fichier
 			break;
 		case 19:
-			// supprimer un fichier
+			supprimerFichier(donnee);
 			break;
 		case 21:
 			// liste des fichier telechargeable partagé par les autres

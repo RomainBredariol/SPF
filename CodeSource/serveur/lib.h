@@ -28,7 +28,7 @@ int televerser(char *donnee);
 int ecrireContenuFichier(char* nomFichier, char *contenu, int size);
 
 //permet de lister les fichiers telechargeble
-int lister(char *donnee);
+int lister();
 
 //extraitNomFichier permet de d'extraire le nom d'un fichier d'un chemin absolue
 char* extraitNomFichier(char *fileName);
@@ -37,3 +37,7 @@ char* extraitNomFichier(char *fileName);
 //on ecrit le nom du fichier et le nom de l'utilisateur a qui il appartient 
 //dans le fichier liste qui recense l'ensemble des fichiers du serveur
 int ajouterFichierListe(char* nomFichier);
+
+// fonction qui supprimer un fichier du serveur
+int supprimerFichier(char *donnee);
+	
