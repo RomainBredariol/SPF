@@ -278,6 +278,7 @@ int televerser(char *donnee){
 
 	//on recoit le fichier
 	ReceptionBinaire(contenu, size);
+
 	//on ecrit le fichier 
 	ecrireContenuFichier(fileName, contenu, size);	
 
