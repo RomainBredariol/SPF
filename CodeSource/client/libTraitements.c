@@ -40,9 +40,10 @@ int televerser() {
 	sprintf(donnee, "008 %s %i\n",fileName, size); 
 	Emission(donnee);
 
-	donnee = realloc(donnee, size);
+	free(donnee);
+	donnee = malloc(size);
+	lireContenuFichier(fileName, donnee, size);
 
-	strcpy(donnee, lireContenuFichier(fileName));		
 	EmissionBinaire(donnee, size);
 	lireReponse();
 

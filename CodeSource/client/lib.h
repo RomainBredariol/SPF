@@ -19,7 +19,7 @@ int choix_menu(int user);
 int lireReponse();
 
 //lit le contenu d'un fichier et le renvoie 
-char* lireContenuFichier(char *nomFichier);
+int lireContenuFichier(char *nomFichier, char *contenu, int taille);
 
 /*Renvoie la taille du fichier demandé*/
 unsigned long longueur_fichier(char *nomFichier);

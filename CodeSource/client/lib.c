@@ -220,18 +220,14 @@ unsigned long longueur_fichier(char *nomFichier)
 	}
 }
 
-char* lireContenuFichier(char *nomFichier){
+int lireContenuFichier(char *nomFichier, char *contenu, int taille){
 	/*      contenu est le contenu du fichier binaire à envoyer au client
 	 *                      taille est la longueur du fichier demande*/
-	char *contenu;
-	unsigned long taille = longueur_fichier(nomFichier);
-
-	contenu = malloc(taille);
 	FILE *fichier = fopen(nomFichier, "r");
 	//ouvre le fichier demande
 	if(fichier == NULL){
 		printf("Erreur ouverture fichier : %s\n", nomFichier);
-		return NULL;
+		return -1;
 	}
 
 	//place le pointeur de fichier au debut du fichier
@@ -239,6 +235,6 @@ char* lireContenuFichier(char *nomFichier){
 	//lit le contenu du fichier
 	fread(contenu, taille, 1, fichier);
 
-	return contenu;
+	return 0;
 }
 	                                                                                                                                                                              
