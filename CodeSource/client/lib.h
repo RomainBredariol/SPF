@@ -23,3 +23,6 @@ int lireContenuFichier(char *nomFichier, char *contenu, int taille);
 
 /*Renvoie la taille du fichier demandé*/
 unsigned long longueur_fichier(char *nomFichier);
+
+//permet d'ecrire dans un fichier
+int ecrireContenuFichier(char *nomFichier, char *contenu, int size);

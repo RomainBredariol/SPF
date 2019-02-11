@@ -55,6 +55,41 @@ int televerser() {
 
 // telecharger permet de télécharger un fichier depuis le serveur
 int telecharger() {
+	char *fichier = malloc(MAX_PATH), *requete, *entete = malloc(MAX_PATH), *contenu;
+	char nomFichier[100];
+	int taille;
+
+	system("clear");
+	listeFichiers();	
+
+	printf("Veuillez entrer le nom du fichier que vous voulez telecharger : \n\n");
+	printf("(Si vous voulez telecharger un "VERT"fichier partage\n"RESET);
+	printf(" Entrez le nom utilisateur et le nom fichier sous le format suivant : nomUtilisateur/nomFichier)\n\n");
+	
+	//on recupere le nom du fichier
+	lire(fichier, MAX_PATH);
+
+	requete = malloc(MAX_PATH+20);	
+	sprintf(requete, "023 %s\n", fichier);
+	
+	//on envoie le nom du fichier a telecharger
+	Emission(requete);
+
+	//on recoit le nom du fichier et sa taille 
+	entete = Reception();	
+	sscanf(entete, "200 %s %i\n", nomFichier, &taille);
+
+	contenu = malloc(taille);
+
+	ReceptionBinaire(contenu, taille);
+
+	ecrireContenuFichier(nomFichier, contenu, taille);
+
+	free(fichier);
+	free(requete);
+	free(contenu);
+	free(entete);
+	
 	return 0;
 }
 

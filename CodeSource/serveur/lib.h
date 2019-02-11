@@ -26,3 +26,6 @@ char* extraitNomFichier(char *fileName);
 //on ecrit le nom du fichier et le nom de l'utilisateur a qui il appartient 
 //dans le fichier liste qui recense l'ensemble des fichiers du serveur
 int ajouterFichierListe(char* nomFichier);
+
+//lit le contenu d'un ficher
+int lireContenuFichier(char *nomFichier, char *contenu, int taille);

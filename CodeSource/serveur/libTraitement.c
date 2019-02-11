@@ -10,7 +10,6 @@
 #define MAX_PATH 260
 
 
-
 //delUser permet de supprimer un utilisateur
 int delUser(char *donnee){
 	char login_mdp[203];
@@ -132,6 +131,40 @@ int televerser(char *donnee){
 	free(contenu);
 	return 0;
 }
+
+//permet d'envoyer un fichier a utilisateur
+int telecharger(char *donnee){
+	char *path = malloc(MAX_PATH), *contenu = malloc(MAX_PATH);
+	int size;
+
+	if(strstr(donnee, "/") == NULL){
+		sprintf(path, "depot/%s/%s", nomUser, donnee);
+	}else{
+		sprintf(path, "depot/%s", donnee);
+	}
+
+	FILE *fichier = fopen(path, "r");
+	if(fichier == NULL){
+		printf("Erreur fopen du fichier %s\n", path);
+		return -1;
+	}
+
+	size = longueur_fichier(path);
+
+	strcpy(donnee, path);
+	extraitNomFichier(donnee);
+
+	sprintf(contenu, "200 %s %i\n",donnee, size);
+	Emission(contenu);
+	free(contenu);
+
+	contenu = malloc(size);
+	lireContenuFichier(path, contenu, size);
+
+	EmissionBinaire(contenu, size);
+	return 0;
+}
+
 //permet de lister les fichiers telechargeble
 int lister(){
 

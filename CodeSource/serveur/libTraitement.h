@@ -19,3 +19,5 @@ int renommerFichier(char *donnee);
 // fonction qui permet d'autoriser un utilisateur à telecharger un fichier
 int addDroits(char *donnee);
 
+//permet d'envoyer un fichier a un client
+int telecharger(char *donnee);

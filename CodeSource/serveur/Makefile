@@ -1,7 +1,8 @@
 
 SRCS =	./serveur.c	\
 	./mainServeur.c \
-	./lib.c
+	./lib.c\
+	./libTraitement.c
 #===============================================================================
 
 CC			= gcc

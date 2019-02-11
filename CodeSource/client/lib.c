@@ -237,4 +237,23 @@ int lireContenuFichier(char *nomFichier, char *contenu, int taille){
 
 	return 0;
 }
-	                                                                                                                                                                              
+//permet d'ecrire dans un fichier
+int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
+	FILE *fichier = fopen(nomFichier, "w");
+	if(fichier == NULL){
+		printf("Erreur fopen %s\n", nomFichier);
+		return -1;
+	}
+
+	int ecode = fwrite(contenu, 1, size, fichier); 
+	if(ecode == 0){
+		printf("Erreur ecriture de donnee dans %s\n", nomFichier);
+		return -1;
+	}
+	fclose(fichier);
+
+	printf("le fichier %s a bien ete telecharge\n", nomFichier);
+	return 0;
+}
+
+

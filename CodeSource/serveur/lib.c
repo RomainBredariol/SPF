@@ -319,6 +319,7 @@ int executerRequete(char * requete){
 			break;
 		case 23:
 			// telecharger un fichier
+			telecharger(donnee);			
 			break;
 		case 25:
 			delUser(donnee);
@@ -329,5 +330,24 @@ int executerRequete(char * requete){
 		default:
 			break;
 	}
+	return 0;
+}
+
+//lit le contenu d'un ficher
+int lireContenuFichier(char *nomFichier, char *contenu, int taille){
+	/* contenu est le contenu du fichier binaire à envoyer au client
+	 * taille est la longueur du fichier demande*/
+	FILE *fichier = fopen(nomFichier, "r");
+	//ouvre le fichier demande
+	if(fichier == NULL){
+		printf("Erreur ouverture fichier : %s\n", nomFichier);
+		return -1;
+	}
+
+	//place le pointeur de fichier au debut du fichier
+	fseek(fichier, 0, SEEK_SET);
+	//lit le contenu du fichier
+	fread(contenu, taille, 1, fichier);
+
 	return 0;
 }
