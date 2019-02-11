@@ -152,7 +152,12 @@ int listeFichiers() {
 	//recevoir les données
 	char *rep;
 	rep = Reception();
-	printf("\n\nLISTE DES FICHIERS TELECHARGEABLES\n(vos fichiers en bleu les fichiers partagés en vert)\n");
+	printf("\n\nLISTE DES FICHIERS TELECHARGEABLES\n\nvos fichiers en ");
+	printf(BLEU"bleu"RESET);
+	printf(" les fichiers partagés en ");
+	printf(VERT"vert"RESET);
+	printf(" par d'autres ");
+	printf(JAUNE"utilisateurs\n\n\n"RESET);
 	for (int i = 0 ; i < strlen(rep); i++ ) {
 			
 		if (rep[i] == ':') {
