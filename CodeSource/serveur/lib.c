@@ -202,6 +202,45 @@ int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
 	return 0;
 }
 
+//on supprime de la liste tous les fichiers qui appartiennent a un utilisateur
+int supprimerFichierListe(char* userName){
+	int ecode;
+	char *userNameList;
+	char liste_fichier[MAX_PATH];
+
+	FILE * fichier = fopen("depot/liste", "r");
+	if(fichier == NULL){
+		printf("Erreur fopen liste\n");
+		return -1;
+	}
+
+	FILE * fichierTmp = fopen("depot/liste.tmp", "w");
+	if(fichierTmp == NULL){
+		printf("Erreur fopen liste tmp\n");
+		return -1;
+	}
+
+	if((fscanf(fichier, "%[^\n]", liste_fichier)) != EOF){
+		do{
+			userNameList = strstr(liste_fichier, " ");
+			userNameList = &userNameList[1];
+			printf("userNameList : %s\n", userNameList);
+			if((strcmp(userNameList, userName)) != 0){
+				ecode = fwrite(liste_fichier, 1, strlen(liste_fichier), fichierTmp); 
+				if(ecode == 0){
+					printf("Erreur ecriture de donnee dans liste Tmp\n");
+					return -1;
+				}
+			}
+		}while((fscanf(fichier, "%[^\n]", liste_fichier)));
+	}
+	rename("liste.tmp", "liste");
+
+	fclose(fichier);
+	fclose(fichierTmp);
+	return 0;
+}
+
 //on ecrit le nom du fichier et le nom de l'utilisateur a qui il appartient 
 //dans le fichier liste qui recense l'ensemble des fichiers du serveur
 int ajouterFichierListe(char* nomFichier){
