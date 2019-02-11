@@ -6,15 +6,16 @@
 
 int main() {
 
-	char *message = NULL;
-	int ecode;
+	char *message = NULL;		// pointeur vers une chaine contenant un message
+	int ecode;			// renvoyé par le serveur pour l'authentification
 
-	//lancer le serveur en demandant le port
+	//lancer le serveur, demander le port d'ouverture
+	// generer les fichiers necessaire au fonctionnement du serveur
 	lancerServeur();
 
-
+	
 	while(1) {
-		int fini = 0;
+		int fini = 0;		// indique si l'utilisateur à terminé 
 
 		//attend qu'un client se connecte
 		AttenteClient();
@@ -22,7 +23,7 @@ int main() {
 		Emission("001 connexion etablie\n");
 
 		//demande l'authentification du client
-		// se repete tant que le code d'authentifiation est mauvais
+		// se repete tant que le code d'authentifiation est mauvais 
 		Emission("002 demande d'authentification\n");
 		do {
 			ecode = authentification();

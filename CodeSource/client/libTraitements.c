@@ -19,6 +19,7 @@
 
 
 
+// auteur : Bredariol Romain
 // televerser permet d'envoyer un fichier sur le serveur
 int televerser() {
 	char *fileName, *donnee;
@@ -53,6 +54,7 @@ int televerser() {
 	return 0;
 }
 
+// auteur : Bredariol Romain
 // telecharger permet de télécharger un fichier depuis le serveur
 int telecharger() {
 	char *fichier = malloc(MAX_PATH), *requete, *entete = malloc(MAX_PATH), *contenu;
@@ -93,18 +95,23 @@ int telecharger() {
 	return 0;
 }
 
-// autorisations permet de ?????
+// auteur : Poussard Sébastien
+// autorisations afficher à l'utilisateur un menu de choix entre autoriser un utilisateur
+// à telecharger un fichier chez lui et revoquer un utilisateur de ces droits de telechargement 
+// sur un de ses fichiers
 int autorisations() {
 	char choixChar[3];		// choix sous forme de chaine
 	char c; 			// char pour vider le stdin
 	int choix;			// choix transformé en int
 
+	// afficher le menu
 	system("clear");
 	printf("=========================================\n");
 	printf("1 - Autoriser un utilisateur à télécharger un fichier\n");
 	printf("2 - Revoquer les droits d'un utilisateur à télécharger un fichier\n");
 	printf("0 - Retour au menu principal\n");
 
+	// recuperer la réponse de l'utilisateur
 	printf("Veuillez entre le numero de l'option souhaitee :\n");
 	fgets(choixChar, 3, stdin);
 
@@ -115,18 +122,17 @@ int autorisations() {
 		//sinon supprimer le new line
 		choixChar[1] = '\0';
 	}
-	
+	// convertir le choix en int	
 	choix = strtol(choixChar, NULL, 10);
-
+	// executer le traitement en fonction du choix de l'utilisateur
 	switch(choix){
 		case 1:
+			// autoriser un utilisateur à telecharger un fichier
 			addDroits();
 			break;
 		case 2:
+			// revoquer les droits d'un utilisateur a telecharger un fichier
 			delDroits();
-			break;
-		case 0: 
-			return 0;
 			break;
 		default:
 			break;
@@ -134,23 +140,27 @@ int autorisations() {
 	return 0;
 }
 
-// etat permet de ???? 
+// auteur : Poussard Sébastien
+// etat permet de d'afficher l'état de l'environnement (dossier) de l'utilisateur
 int etat() {
 	return 0;
 }
 
-// gererFichiers  permets de ???? 
+// auteur : Poussard Sébastien
+// gererFichiers  permets d'affichr un menu pour supprimer ou renommer un fichier de l'utilisateur 
 int gererFichiers() {
 	char choixChar[3];		// choix sous forme de chaine
 	char c; 			// char pour vider le stdin
 	int choix;			// choix transformé en int
 
+	// afficher le menu
 	system("clear");
 	printf("=========================================\n");
 	printf("1 - Supprimer fichier\n");
 	printf("2 - Renommer fichier\n");
 	printf("0 - Retour au menu principal\n");
 
+	// lire l'option choisis par l'utilisateur
 	printf("Veuillez entre le numero de l'option souhaitee :\n");
 	fgets(choixChar, 3, stdin);
 
@@ -162,17 +172,18 @@ int gererFichiers() {
 		choixChar[1] = '\0';
 	}
 	
+	// convertir le choix en int
 	choix = strtol(choixChar, NULL, 10);
 
+	// executer le traitement adequat au choix de l'utilisateur
 	switch(choix){
 		case 1:
+			// supprimer un fichier du dossier de l'utilisateur
 			supprimerFichier();
 			break;
 		case 2:
+			// renommer un fichier du dossier de l'utilisateur
 			renommerFichier();
-			break;
-		case 0: 
-			return 0;
 			break;
 		default:
 			break;
@@ -180,44 +191,58 @@ int gererFichiers() {
 	return 0;
 }
 
-// listeFichiers permet de lister les fichiers telechargeable
+// auteur : Poussard Sébastien
+// listeFichiers permet de lister les fichiers telechargeable (ceux de l'utilisateur et ceux partagés)
 int listeFichiers() {
 
+	// envoi du code pour obtenir les infos sur les fichiers telechargeable au serveur
 	Emission("10 \n");
 	//recevoir les données
-	char *rep;
+	char *rep;		// pointeur de chaine contenant la réponse du serveur
 	rep = Reception();
+	// afficher proprement la réponse obtenue
 	printf("\n\nLISTE DES FICHIERS TELECHARGEABLES\n\nvos fichiers en ");
+	// indiquer a l'utilisateur le code couleur utilisé
 	printf(BLEU"bleu"RESET);
 	printf(" les fichiers partagés en ");
 	printf(VERT"vert"RESET);
 	printf(" par d'autres ");
 	printf(JAUNE"utilisateurs\n\n\n"RESET);
+	// lire chaque caractere de la reponse
 	for (int i = 0 ; i < strlen(rep); i++ ) {
-			
+		// si c'est un ":" soter une ligne
 		if (rep[i] == ':') {
 			printf("\n");
+		// si c'est un "?" alors la suite correspondra au nom d'un utilisateur qui partage avec 
+		// nous un fichier
 		} else if (rep[i] == '?') {
 			printf(RESET"l'utilisateur "JAUNE);
+		// si c'est un "!" alors la suite correspondra au fichier partagé par l'utilisateur
 		} else if (rep[i] == '!') {
 			printf(RESET" partage le fichier "VERT);
+		// si c'est un "#" alors la suite correspond a un fichier du repretoire de l'utilisateur
 		} else if (rep[i] == '#') {
 			printf(BLEU);
 		} else {
 			printf("%c",rep[i]);
 		}
 	}
+	// reset le code couleur pour la suite du programme
 	printf(RESET);
 	
 	return 0;
 }
 
-// gestionComptes permet de ????
+// auteurs : Poussard Sébastien, Bredariol Romain
+// gestionComptes affiche le menu pour que l'administrateur choisisse netre 
+// ajouter un utilisateur, supprimer un utilisateur ou modifier le compte administrateur
 int gestionComptes() {
+	// auteur : Bredariol Romain
 	char choixChar[3];		// choix sous forme de chaine
 	char c; 			// char pour vider le stdin
 	int choix;			// choix transformé en int
 
+	// afficher le menu de choix
 	system("clear");
 	printf("=========================================\n");
 	printf("1 - Ajouter un utilisateur\n");
@@ -225,9 +250,11 @@ int gestionComptes() {
 	printf("3 - Modifier les infos super utilisateur\n");
 	printf("0 - Retour au menu principal\n");
 
+	// lire le choix de l'utilisateur
 	printf("Veuillez entre le numero de l'option souhaitee :\n");
 	fgets(choixChar, 3, stdin);
 
+	// auteur : Poussard Sébastien
 	// vider le stdin si l'utilisateur depasse
 	if (choixChar[2] != '\0') {
 		while ((c = getchar()) != '\n' && c != EOF) { }
@@ -236,26 +263,34 @@ int gestionComptes() {
 		choixChar[1] = '\0';
 	}
 	
+	// transformer le choix en int
 	choix = strtol(choixChar, NULL, 10);
 	printf("utilisateur choisi : %d \n",choix);
 
+	// executer le choix de l'utilisateur
 	switch(choix){
 		case 1:
+			// ajouter un nouvel utilisateur
 			addUser();
 			break;
 		case 2:
+			// supprimer un utilisateur
 			delUser();
 			break;
 		case 3:
+			// editer le compte administrateur
 			editSu();
 			break;
 		case 0: 
 			return 0;
 			break;
+		default:
+			break;
 	}
 	return 0;
 }
 
+// auteur : Bredariol Romain
 //addUser permet de saisir un nouvel utilisateur
 int addUser(){
 	char login[100];	// chaine utilisé pour le login
@@ -277,6 +312,7 @@ int addUser(){
 	return 0;
 }
 
+// auteur : Bredariol Romain
 //delUser permet de supprimer un utilisateur
 int delUser(){
 	char login[100];	// chaine utilisé pour le login
@@ -299,9 +335,11 @@ int delUser(){
 	return 0;
 }
 
+// auteur : Poussard Sébastien
 //lire permet de recuperer une chaine de caractere dans le buffer stdin
 int lire(char *chaine, int size){
-	char c;
+	char c;			// caractere utilisé pour vider le buffer
+	// lire la reponse de l'utilisateur
 	fgets(chaine, size+1, stdin);
 
 	// vider le stdin si l'utilisateur depasse
@@ -314,6 +352,7 @@ int lire(char *chaine, int size){
 	return 0;
 }
 
+// auteur : Bredariol Romain
 //lecture_login_mdp permet de recuperer le login et le mdp dans le buffer stdin
 int lecture_login_mdp(char *login, char *mdp){
 	//recuperation login
@@ -327,6 +366,7 @@ int lecture_login_mdp(char *login, char *mdp){
 	return 0;
 }
 
+// auteur : Bredariol Romain
 //editSu permet de modifier les login et mdp du Su
 int editSu(){
 	char login[100];	// chaine utilisé pour le login
@@ -349,26 +389,33 @@ int editSu(){
 }
 
 
+// auteur : Poussard Sébastien
 // fonction qui permet a l'utilisateur de supprimer une fichier de son environnement
 int supprimerFichier() {
 	// lister les fichier pour savoir quoi pouvoir supprimer
 	listeFichiers();
 	printf("\nQuel fichier voulez vous supprimer?\n\n");
+
 	// lire la reponse de l'utilisateur
 	char reponse[50];
 	memset(reponse,0,50);
 	lire(reponse,50);
-	// envoyer la requete de suppression
-	char requete[60];
+	
+	//forger la requete
+	char requete[60];		// chaine contenant la requete a emettre au serveru
 	memset(requete,0,60);
 	strcpy(requete,"19 ");
 	strcat(requete,reponse);
 	strcat(requete,"\n");
+
+	// envoyer la requete de suppression
 	Emission(requete);
+
 	// lire la reponse du serveur
-	char *rep;
+	char *rep;	// pointeur vers une chaine contenant la reponse du serveur
 	rep = Reception();
 
+	// afficher reussite ou echec de la requete en fonction de ce qu'envoi le serveur
 	if(strcmp(rep,"007\n") == 0) {
 		printf("suppression du fichier réussie\n");
 	} else {
@@ -378,8 +425,10 @@ int supprimerFichier() {
 	return 0;
 }
 
+// auteur : Poussard Sébastien
 // fonction qui permet à l'utilisateur de renomer un fichier de son environnement
 int renommerFichier() {
+
 	// lister les fichier pour savoir quoi pouvoir supprimer
 	listeFichiers();
 	printf("\nQuel fichier voulez vous renomer ?\n\n");
@@ -407,6 +456,7 @@ int renommerFichier() {
 	char *rep;
 	rep = Reception();
 
+	// afficher un message en fonction de la reponse du serveur (echec ou reussite)
 	if(strcmp(rep,"007\n") == 0) {
 		printf("fichier renommé avec succés\n");
 	} else {
@@ -416,6 +466,7 @@ int renommerFichier() {
 	return 0;
 }
 
+// auteur : Poussard Sébastien
 // autoriser un utilisateur à pouvoir telecharger un de nos fichiers
 int addDroits() {
 
@@ -446,6 +497,7 @@ int addDroits() {
 	char *rep;
 	rep = Reception();
 
+	// afficher un message en fonction de la reponse du serveur (echec ou reussite)
 	if(strcmp(rep,"007\n") == 0) {
 		printf("utilisateur autorisé avec succés\n");
 	} else {
@@ -455,12 +507,13 @@ int addDroits() {
 	return 0;
 }
 
+// auteur : Poussard Sébastien
 // revoquer les droits d'un utilisateur à telecharger un fichier
 int delDroits() {
 
-	char utilisateur[50];
+	char utilisateur[50];		// chaine contenant le nom d'un utilisateur
 	memset(utilisateur,0,50);
-	char fichier[50];
+	char fichier[50];		// chaine contenant le nom d'un fichier
 	memset(fichier,0,50);
 
 	// lire l'utilisateur dont on doit revoquer un droit
@@ -482,6 +535,7 @@ int delDroits() {
 	char *rep;
 	rep = Reception();
 
+	// afficher un message en fonction de la reponse du serveur (echec ou reussite)
 	if(strcmp(rep,"007\n") == 0) {
 		printf("utilisateur autorisé avec succés\n");
 	} else {
