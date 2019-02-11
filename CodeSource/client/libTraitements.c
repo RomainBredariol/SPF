@@ -152,14 +152,22 @@ int listeFichiers() {
 	//recevoir les données
 	char *rep;
 	rep = Reception();
-	printf("\n\nLISTE DES FICHIERS TELECHARGEABLES\n\n");
+	printf("\n\nLISTE DES FICHIERS TELECHARGEABLES\n(vos fichiers en bleu les fichiers partagés en vert)\n");
 	for (int i = 0 ; i < strlen(rep); i++ ) {
-		if (rep[i] != ':') {
-			printf(BLEU"%c"RESET,rep[i]);
-		} else {
+			
+		if (rep[i] == ':') {
 			printf("\n");
-		}	
+		} else if (rep[i] == '?') {
+			printf(RESET"l'utilisateur "JAUNE);
+		} else if (rep[i] == '!') {
+			printf(RESET" partage le fichier "VERT);
+		} else if (rep[i] == '#') {
+			printf(BLEU);
+		} else {
+			printf("%c",rep[i]);
+		}
 	}
+	printf(RESET);
 	
 	return 0;
 }

@@ -135,6 +135,7 @@ int televerser(char *donnee){
 //permet de lister les fichiers telechargeble
 int lister(){
 
+	// lister les fichier du dossier utilisateur
 	DIR *d;
      	struct dirent *dir;
 	char cheminUser[50];
@@ -147,11 +148,30 @@ int lister(){
      	if (d) {
         	while ((dir = readdir(d)) != NULL){
 			if (strcmp(dir->d_name,".") != 0 && strcmp(dir->d_name,"..") != 0 && strcmp(dir->d_name,"autorisations")){
+				strcat(reponse,"#");
 				strcat(reponse,dir->d_name);
 				strcat(reponse,":");
 			} 	
         	}
         closedir(d);
+
+	// lister les fichiers partagés
+	strcat(cheminUser,"/autorisations");
+	FILE *f = fopen(cheminUser,"r");
+	char partageur[50];
+	char fichierPartage[50];
+	memset(partageur,0,50);
+	memset(fichierPartage,0,50);
+	
+	while(fscanf(f,"%[^/]/%[^\n]\n",partageur,fichierPartage) != EOF) {
+		strcat(reponse,"?");
+		strcat(reponse,partageur);
+		strcat(reponse,"!");
+		strcat(reponse,fichierPartage);
+		strcat(reponse,":");
+	}
+
+	// envoi de la réponse
 	strcat(reponse,"\n");
 	Emission(reponse);
      	}
@@ -294,7 +314,7 @@ int addDroits(char *donnee) {
 	if (f != NULL) { printf("fichier ouvert %s\n",cheminUser); }
 	// ecrire dans le fichier
 	memset(cheminUser,0,50);
-	sprintf(cheminUser,"../%s/%s\n",nomUser,fichier);
+	sprintf(cheminUser,"%s/%s\n",nomUser,fichier);
 	fputs(cheminUser,f);
 	fclose(f);
 	// envoyer un message pour OK

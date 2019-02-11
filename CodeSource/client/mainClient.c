@@ -62,9 +62,11 @@ int main() {
 
 	continuer = choix_menu(privileges);
 	
-	printf("appuyer sur Entree pour continuer\n");
-	getchar();
-	system("clear");
+	if (!continuer) {
+		printf("appuyer sur Entree pour continuer\n");
+		getchar();
+		system("clear");
+	}
 	} while (continuer != 1);
 		
 	// terminer la connexion
