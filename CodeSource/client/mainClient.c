@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "client.h"
 #include "lib.h"
 
@@ -46,6 +47,7 @@ int main() {
 		return -1;
 	}
 	privileges = codeReponse;
+	system("clear");
 	// souhaiter la bienvenue (nous ne sommes pas des malotrues)
 	printf("\n\n"JAUNE" Bienvenue "RESET);
 	if (privileges == 5) {
@@ -59,7 +61,12 @@ int main() {
 	afficher_menu(privileges);
 
 	continuer = choix_menu(privileges);
-	system("clear");
+	
+	if (!continuer) {
+		printf("appuyer sur Entree pour continuer\n");
+		getchar();
+		system("clear");
+	}
 	} while (continuer != 1);
 		
 	// terminer la connexion

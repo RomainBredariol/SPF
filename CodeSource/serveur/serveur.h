@@ -78,7 +78,7 @@ void TerminaisonClient();
  */
 void Terminaison();
 
-int authentification();
+//execute la requete demande si il en a le droit
 int executerRequete(char * requete);
 
 #endif

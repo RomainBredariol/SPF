@@ -382,35 +382,6 @@ int envoyerContenuFichierBinaire(char *nomFichier){
 	
 	return 0;
 }
-
-int executerRequete(char * requete){
-	char codeUser[5];
-	char choix[3];
-	char donnee[200];
-
-	sscanf(requete, "%s %s %[^\n]", codeUser, choix, donnee);
-
-	//Si c'est un user normal
-	if(strcmp(codeUser, "204")==0){
-	}
-
-	//si c'est le su
-	if(strcmp(codeUser, "205")==0){
-		if(strcmp(choix, "7.1")==0){
-			addUser(donnee);
-		}
-		if(strcmp(choix, "7.2")==0){
-			delUser(donnee);
-		}
-		if(strcmp(choix, "7.3")==0){
-			editSu(donnee);
-		}
-	}
-
-	return 0;
-}
-
-
 /* Ferme la connexion avec le client.
  */
 void TerminaisonClient() {

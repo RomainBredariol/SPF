@@ -66,3 +66,13 @@ dkms.conf
 *.h~
 
 CodeSource/client/Makefile~
+
+*.txt~
+
+CodeSource/serveur/Makefile~
+
+CodeSource/serveur/depot/
+
+CodeSource/serveur/users
+
+CodeSource/client/Poussard_Bredariol_Info_TP3Client\.docx
