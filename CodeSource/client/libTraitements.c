@@ -528,7 +528,7 @@ int delDroits() {
 	char requete[50];
 	memset(requete,0,50);
 
-	sscanf(requete,"13 %s %s\n"utilisateur,fichier);
+	sscanf(requete,"13 %s %s\n",utilisateur,fichier);
 	Emission(requete);
 
 	// lire la reponse du serveur
