@@ -382,65 +382,6 @@ int envoyerContenuFichierBinaire(char *nomFichier){
 	
 	return 0;
 }
-// executre une requete demandé
-int executerRequete(char * requete){
-	char choixChar[5];
-	char donnee[200];
-	int choix;
-
-	memset(choixChar, 0, 5);
-	memset(donnee, 0, 200);
-	sscanf(requete, "%s %[^\n]", choixChar, donnee);
-	
-	// conversion de choixChar en int
-	choix = strtol(choixChar, NULL, 10);
-
-	// selection du choix
-	switch(choix) {
-		case 6:
-			addUser(donnee);
-			break;
-		case 8:
-			televerser(donnee);
-			break;
-		case 10:
-			lister(donnee);
-			break;
-		case 11:
-			addDroits(donnee);
-			break;
-		case 13:
-			// enlever un utilisateur de la liste des utilisateurs autorisés 
-			// a telecharger un fichier
-			break;
-		case 15:
-			// demande de l'état de l'espace de stockage
-			break;
-		case 17:
-			renommerFichier(donnee);
-			break;
-		case 19:
-			supprimerFichier(donnee);
-			break;
-		case 21:
-			// liste des fichier telechargeable partagé par les autres
-			break;
-		case 23:
-			// telecharger un fichier
-			break;
-		case 25:
-			delUser(donnee);
-			break; 
-		case 27:
-			editSu(donnee);
-			break;
-		default:
-			break;
-	}
-	return 0;
-}
-
-
 /* Ferme la connexion avec le client.
  */
 void TerminaisonClient() {
