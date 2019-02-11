@@ -304,6 +304,7 @@ int executerRequete(char * requete){
 		case 13:
 			// enlever un utilisateur de la liste des utilisateurs autorisés 
 			// a telecharger un fichier
+			delDroits(donnee);
 			break;
 		case 15:
 			// demande de l'état de l'espace de stockage

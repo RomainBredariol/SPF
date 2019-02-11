@@ -21,3 +21,7 @@ int addDroits(char *donnee);
 
 //permet d'envoyer un fichier a un client
 int telecharger(char *donnee);
+
+// fonction qui permet d'enlever les autorisation d'un fichier à un utilisateur
+int delDroits(char *donnee);
+

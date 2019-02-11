@@ -354,3 +354,49 @@ int addDroits(char *donnee) {
 	Emission("007\n");
 	return 0;
 }
+// fonction qui permet d'enlever les autorisation d'un fichier à un utilisateur
+int delDroits(char *donnee) {
+	
+	// séparer utilisateur et nom de fichier de la requete
+	char utilisateur[50];
+	char fichier[50];
+	memset(utilisateur,0,50);
+	memset(fichier,0,50);
+	sscanf(donnee,"%[^ ] %[^ ]",utilisateur,fichier);
+
+	// verifier que l'utilisateur existe sinon envoyer un message d'erreur
+	char chemin[50];
+	memset(chemin,0,50);
+	sscanf(chemin,"depot/%s",utilisateur);
+	if (opendir(chemin) == NULL) {
+		Emission("202\n");
+		return 1;
+	}
+	//verifier que l'autorisation existe et suppression de celle-ci si elle existe
+	// ouverture du fichier contenant les autorisations
+	strcat(chemin,"/autorisations");
+	FILE *f = fopen(chemin,"r");
+	if (f == NULL) {
+		Emission("202\n");
+		return 1;
+	}
+	// creation d'un nouveau fichier
+	strcat(chemin,".tmp");
+	FILE *f2 = fopen(chemin,"w");
+	if (f == NULL) {
+		Emission("202\n");
+		return 1;
+	}
+	// boucle de lecture ecriture
+	int existe = 0;
+	char ligne[100];
+	memset(ligne,0,100);
+	sscanf(ligne,"%s/%s\n",nomUser,fichier);
+	while (
+	
+
+		
+	// envoyer un message pour OK
+	Emission("007\n");
+	return 0;
+}

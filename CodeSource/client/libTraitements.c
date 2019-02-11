@@ -458,5 +458,35 @@ int addDroits() {
 // revoquer les droits d'un utilisateur à telecharger un fichier
 int delDroits() {
 
+	char utilisateur[50];
+	memset(utilisateur,0,50);
+	char fichier[50];
+	memset(fichier,0,50);
+
+	// lire l'utilisateur dont on doit revoquer un droit
+	printf("\nQuel utilisateur souhaitez vous revoquer les droits d'accés ?\n\n");
+	lire(utilisateur,50);
+
+	// lire le nom du fichier 
+	printf("sur quel fichier voulez vous révoquer les droits de %s?\n",utilisateur);
+	lire(fichier,50);
+
+	// forger la requete et l'envoyer
+	char requete[50];
+	memset(requete,0,50);
+
+	sscanf(requete,"13 %s %s\n"utilisateur,fichier);
+	Emission(requete);
+
+	// lire la reponse du serveur
+	char *rep;
+	rep = Reception();
+
+	if(strcmp(rep,"007\n") == 0) {
+		printf("utilisateur autorisé avec succés\n");
+	} else {
+		printf("autorisation impossible (nom de fichier ou utilisateur inexistant)\n");
+	}
+	
 	return 0;
 }
