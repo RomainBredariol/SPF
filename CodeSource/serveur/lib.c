@@ -21,6 +21,7 @@ struct user{
 //le super utilisateur
 struct user su = {"ad", "ad"};
 
+// auteur : Bredariol Romain
 //edition du super utilisateur
 int editSu(char *donnee){
 	char login[100], mdp[100];
@@ -37,7 +38,9 @@ int editSu(char *donnee){
 	return 0;
 }
 
-//verifie si l'utilisateur existe
+// auteur : Bredariol Romain
+// is_user vérifie sir l'utilisateur existe et si son 
+// mot de passe est correcte
 int is_user(char * login_mdp){
 	//login et mdp sont ceux du client qui essaye de se connecter
 	//login_test et mdp_test sont ceux recupere 
@@ -83,8 +86,10 @@ int is_user(char * login_mdp){
 	return 0;
 }
 
-// fonction qui lance le serveur en demandant le port d'ouverture 
-// à l'utilisateur
+// auteur : Poussard Sébastien
+// fonction qui lance le serveur
+// demande à l'utilisateur le port qu'il veut utiliser, sinon utilise 1337 par defaut
+// crée toute les fichier necessaire au fonctionnement du serveur s'il ne sont pas présent
 int lancerServeur() {
 	char port[7];			// port sur lequel le serveur ecoute les requetes
 	char c;				// char pour vider le stdin
@@ -141,7 +146,8 @@ int lancerServeur() {
 	return 0;
 }
 
-/*Demande l'authentification au client*/
+// auteur : Bredariol Romain
+//Demande l'authentification au client
 int authentification(){
 	char * user;
 	//l'ecode est un code d'erreur
@@ -168,6 +174,7 @@ int authentification(){
 	return 0;
 }
 
+// auteur : Bredariol Romain
 //extraitNomFichier permet de d'extraire le nom d'un fichier d'un chemin absolue
 char* extraitNomFichier(char *fileName){
 	char *ptr;
@@ -178,6 +185,7 @@ char* extraitNomFichier(char *fileName){
 	return fileName;
 }
 
+// auteur : Bredariol Romain
 //permet d'ecrire dans un fichier
 int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
 	char path[MAX_PATH];
@@ -202,6 +210,7 @@ int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
 	return 0;
 }
 
+// auteur : Bredariol Romain
 //on supprime de la liste tous les fichiers qui appartiennent a un utilisateur
 int supprimerFichierListe(char* userName){
 	int ecode;
@@ -241,6 +250,7 @@ int supprimerFichierListe(char* userName){
 	return 0;
 }
 
+// auteur : Bredariol Romain
 //on ecrit le nom du fichier et le nom de l'utilisateur a qui il appartient 
 //dans le fichier liste qui recense l'ensemble des fichiers du serveur
 int ajouterFichierListe(char* nomFichier){
@@ -274,31 +284,39 @@ int ajouterFichierListe(char* nomFichier){
 	return 0;
 }
 
-// executer une requete demandé
+// auteur : Poussard Sébastien
+// cette fonction récupere la requete du client et execute en fonction du code
+// utilisé la fonction adéquat
 int executerRequete(char * requete){
-	char choixChar[5];
-	char donnee[200];
-	int choix;
+
+	char choixChar[5];	// chaine contenant le code de la requete du client
+	char donnee[200];	// donnee suivant le numéro de la requete
+	int choix;		// code de la requete sous forme de int
 
 	memset(choixChar, 0, 5);
 	memset(donnee, 0, 200);
+	// séparer de la requete le choix et les données
 	sscanf(requete, "%s %[^\n]", choixChar, donnee);
 	
-	// conversion de choixChar en int
+	// conversion de choix de chaine de caractere vers un int
 	choix = strtol(choixChar, NULL, 10);
 
 	// selection du choix
 	switch(choix) {
 		case 6:
+			// ajouter un nouvel utilisateur
 			addUser(donnee);
 			break;
 		case 8:
+			// televerser un fichier
 			televerser(donnee);
 			break;
 		case 10:
+			// lister les fichier telechargeable
 			lister(donnee);
 			break;
 		case 11:
+			// autoriser un utilisateur à telecharger un fichier
 			addDroits(donnee);
 			break;
 		case 13:
@@ -310,22 +328,23 @@ int executerRequete(char * requete){
 			// demande de l'état de l'espace de stockage
 			break;
 		case 17:
+			// renomer un fichier
 			renommerFichier(donnee);
 			break;
 		case 19:
+			// supprimer un fichier
 			supprimerFichier(donnee);
-			break;
-		case 21:
-			// liste des fichier telechargeable partagé par les autres
 			break;
 		case 23:
 			// telecharger un fichier
 			telecharger(donnee);			
 			break;
 		case 25:
+			// supprimer un utilisateur
 			delUser(donnee);
 			break; 
 		case 27:
+			// editer le compte administrateur
 			editSu(donnee);
 			break;
 		default:
@@ -334,6 +353,7 @@ int executerRequete(char * requete){
 	return 0;
 }
 
+// auteur : Bredariol Romain
 //lit le contenu d'un ficher
 int lireContenuFichier(char *nomFichier, char *contenu, int taille){
 	/* contenu est le contenu du fichier binaire à envoyer au client
