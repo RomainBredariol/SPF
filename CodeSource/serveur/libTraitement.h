@@ -37,3 +37,14 @@ int telecharger(char *donnee);
 // fonction qui permet d'enlever les autorisation d'un fichier à un utilisateur
 int delDroits(char *donnee);
 
+// auteur : Poussard Sébastien
+// cette fonction retourne au client  l'état de l'environnement de l'utilisateur (nombre de fichiers,
+// taille consommés, taille disponible ... 
+int etat(char *donnee);
+
+// auteur : Poussard Sébastien
+// cette fonction retourne la place disponible dans l'environnement de l'utilisateur
+// pour le stockage de ses fichiers
+int placeDisponible();
+
+
