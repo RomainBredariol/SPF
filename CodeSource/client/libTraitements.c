@@ -528,7 +528,7 @@ int delDroits() {
 	char requete[50];
 	memset(requete,0,50);
 
-	sscanf(requete,"13 %s %s\n",utilisateur,fichier);
+	sprintf(requete,"13 %s %s\n",utilisateur,fichier);
 	Emission(requete);
 
 	// lire la reponse du serveur
@@ -537,9 +537,9 @@ int delDroits() {
 
 	// afficher un message en fonction de la reponse du serveur (echec ou reussite)
 	if(strcmp(rep,"007\n") == 0) {
-		printf("utilisateur autorisé avec succés\n");
+		printf("Les droits ont bien ete revoque\n");
 	} else {
-		printf("autorisation impossible (nom de fichier ou utilisateur inexistant)\n");
+		printf("Revoquation impossible (nom de fichier ou utilisateur inexistant)\n");
 	}
 	
 	return 0;

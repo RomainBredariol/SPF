@@ -55,17 +55,21 @@ int delUser(char *donnee){
 	char command[100];	// chaine contenant la commande a executer
 	memset(user,0,50);
 	memset(command,0,100);
+
 	// forger la commande a executer
 	sscanf(donnee,"%[^ ]",user);
-	printf("user = %s\n", user);
 	strcpy(command,"rm -rf depot/");
 	strcat(command,user);
-	printf("command = %s\n",command);
+
 	// executer la commande
 	system(command);
 	printf("Suppression de l'utilisateur de la liste des utilisateurs et suppression de son environnement\n");
+
+	supprimerFichierListe(user);
+
 	// envoyer la confirmation au client
 	Emission("007 L'utilisateur a ete supprime\n");
+
 	return 0;
 }
 
@@ -422,6 +426,10 @@ int delDroits(char *donnee) {
 	// auteur : Poussard Sébastien	
 	char utilisateur[50];		// chaine contenant le nom de l'utilisateur dont on doit supprimer les droits
 	char fichier[50];		// chaine contenant le nom du fichier dont on doit retirer les droits
+	char chemin[MAX_PATH];		// chemin d'accés
+	char chemin_tmp[MAX_PATH];	// chemin d'accés temporaire
+	char fileAuto[MAX_PATH];	// chaine recupere dans le fichier autorisation
+	int ecode;			// error code
 
 	memset(utilisateur,0,50);
 	memset(fichier,0,50);
@@ -430,16 +438,16 @@ int delDroits(char *donnee) {
 	sscanf(donnee,"%[^ ] %[^ ]",utilisateur,fichier);
 
 	// verifier que l'utilisateur existe sinon envoyer un message d'erreur
-	char chemin[50];		// chemin d'accés
 
 	memset(chemin,0,50);
 	// forger le chemin
-	sscanf(chemin,"depot/%s",utilisateur);
+	sprintf(chemin,"depot/%s",utilisateur);
 	// si le dossier ne peut pas être ouvert, envoyer un message d'erreur au client
 	if (opendir(chemin) == NULL) {
 		Emission("202\n");
 		return 1;
 	}
+
 	// auteur : Bredariol Romain
 	//verifier que l'autorisation existe et suppression de celle-ci si elle existe
 	// ouverture du fichier contenant les autorisations
@@ -449,21 +457,31 @@ int delDroits(char *donnee) {
 		Emission("202\n");
 		return 1;
 	}
+
 	// creation d'un nouveau fichier
-	strcat(chemin,".tmp");
-	FILE *f2 = fopen(chemin,"w");
-	if (f == NULL) {
+	sprintf(chemin_tmp, "%s.tmp", chemin);
+	FILE *f_tmp = fopen(chemin,"w");
+	if (f_tmp == NULL) {
 		Emission("202\n");
 		return 1;
 	}
-	// boucle de lecture ecriture
-	int existe = 0;
-	char ligne[100];
-	memset(ligne,0,100);
-	sscanf(ligne,"%s/%s\n",nomUser,fichier);
-	// ??????	
 
-		
+	memset(donnee, 0, strlen(donnee));
+	
+	sprintf(donnee, "%s/%s", utilisateur, fichier);
+
+	while(fscanf(f, "%s", fileAuto) != EOF){
+		if(strcmp(fileAuto, donnee)==0){
+			ecode = fwrite(fileAuto, 1, strlen(fileAuto), f_tmp); 
+			if(ecode == 0){
+				printf("Erreur ecriture de donnee dans autorisation.tmp\n");
+				return -1;
+			}
+		}
+	}
+
+	rename(chemin_tmp, chemin);
+
 	// envoyer un message pour pour indiquer le succés de la requete
 	Emission("007\n");
 	return 0;
