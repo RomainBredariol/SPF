@@ -214,8 +214,7 @@ int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
 //on supprime de la liste tous les fichiers qui appartiennent a un utilisateur
 int supprimerFichierListe(char* userName){
 	int ecode;
-	char *userNameList;
-	char liste_fichier[MAX_PATH];
+	char liste_fichier[MAX_PATH], liste_user[100], fichier_nom[MAX_PATH+102];
 
 	FILE * fichier = fopen("depot/liste", "r");
 	if(fichier == NULL){
@@ -229,21 +228,19 @@ int supprimerFichierListe(char* userName){
 		return -1;
 	}
 
-	if((fscanf(fichier, "%[^\n]", liste_fichier)) != EOF){
-		do{
-			userNameList = strstr(liste_fichier, " ");
-			userNameList = &userNameList[1];
-			printf("userNameList : %s\n", userNameList);
-			if((strcmp(userNameList, userName)) != 0){
-				ecode = fwrite(liste_fichier, 1, strlen(liste_fichier), fichierTmp); 
-				if(ecode == 0){
-					printf("Erreur ecriture de donnee dans liste Tmp\n");
-					return -1;
-				}
+	while(fscanf(fichier, "%s %s", liste_fichier, liste_user) != EOF){
+		if((strcmp(liste_user, userName)) != 0){
+			sprintf(fichier_nom, "%s %s", liste_fichier, liste_user);
+			ecode = fwrite(fichier_nom, 1, strlen(fichier_nom), fichierTmp); 
+			if(ecode == 0){
+				printf("Erreur ecriture de donnee dans liste Tmp\n");
+				return -1;
 			}
-		}while((fscanf(fichier, "%[^\n]", liste_fichier)));
+		}
+
 	}
-	rename("liste.tmp", "liste");
+
+	rename("depot/liste.tmp", "depot/liste");
 
 	fclose(fichier);
 	fclose(fichierTmp);
@@ -256,7 +253,7 @@ int supprimerFichierListe(char* userName){
 int ajouterFichierListe(char* nomFichier){
 	char contenu[strlen(nomFichier)+105];
 	int ecode;
-	char liste_fichier[MAX_PATH];
+	char liste_fichier[MAX_PATH], liste_user[100];
 
 	FILE * fichier = fopen("depot/liste", "a+");
 	if(fichier == NULL){
@@ -264,15 +261,15 @@ int ajouterFichierListe(char* nomFichier){
 		return -1;
 	}
 
-	sprintf(contenu, "%s %s", nomFichier, nomUser);
-
-	if((fscanf(fichier, "%[^\n]", liste_fichier)) != EOF){
-		do{
-			if((strcmp(liste_fichier, contenu)) == 0){
+	while(fscanf(fichier, "%s %s", liste_fichier, liste_user) != EOF){
+		if((strcmp(liste_fichier, nomFichier)) == 0){
+			if(strcmp(liste_user, nomUser) == 0){
 				return 0;
 			}
-		}while((fscanf(fichier, "%[^\n]", liste_fichier)));
+		}
 	}
+
+	sprintf(contenu, "%s %s", nomFichier, nomUser); 
 	strcat(contenu, "\n");
 	ecode = fwrite(contenu, 1, strlen(contenu), fichier); 
 	if(ecode == 0){

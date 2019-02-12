@@ -270,7 +270,7 @@ int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
 	}
 	fclose(fichier);
 
-	printf("le fichier %s a bien ete telecharge\n", nomFichier);
+	printf("\nle fichier "BLEU"%s"RESET" a bien ete telecharge\n\n", nomFichier);
 	return 0;
 }
 
