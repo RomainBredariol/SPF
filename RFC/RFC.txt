@@ -5,7 +5,7 @@
 RFC-soumission                                          Bredariol Romain
                                                       Poussard Sebastien
 Statut: soumis a correction                                         STRI
-                                                              13/01/2019
+                                                              12/02/2019
 
 
                   Service de Partage de Fichier (SPF)
@@ -53,67 +53,6 @@ Table of Contents
  
 
 
-Bredariol & Poussard                                            [Page 1]
-
-
-                  Service de Partage de Fichier (SPF)         13/01/2019
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-Bredariol & Poussard                                            [Page 2]
-
-
-                  Service de Partage de Fichier (SPF)         13/01/2019
 
 
 1 Introduction
@@ -183,14 +122,14 @@ Bredariol & Poussard                                            [Page 3]
 3.2 erreurs
 
    une erreur prendra la forme suivante
-   "1<numero de l'erreur> [message decrivant l'erreur]"
-   une requete commence donc toujours par un 1
+   "[12]<numero de l'erreur> [message decrivant l'erreur]"
+   une requete commence donc toujours par un 1 ou un 2
 
 3.3 donnees
 
    un echange de donnee prendra la forme suivante
-   "200 [donnees]"
-   une echange de donnees commence par un 200.
+   "xxx [donnees]"
+   les donnees sont toujours envoyees apres un identifiant de requete.
 
 
 4 Message echanges
@@ -221,15 +160,6 @@ Bredariol & Poussard                                            [Page 3]
 4.2.2 PDU
 
    la connexion serveur client a ete etablie
- 
-
-
-Bredariol & Poussard                                            [Page 4]
-
-
-                  Service de Partage de Fichier (SPF)         13/01/2019
-
-
    serveur : "001 [Connexion etablie]"
 
 
@@ -281,17 +211,7 @@ Bredariol & Poussard                                            [Page 4]
 
 4.4.1 logique
 
-
-Bredariol & Poussard                                            [Page 5]
-
-
-                  Service de Partage de Fichier (SPF)         13/01/2019
-
-
-   si un utilisateur n'a pas d'identifiants, il peut s'inscrire au
-   service, le client DOIT envoyer un message contenant les informations
-   necessaire a l'inscription, le serveur DOIT lui repondre s'il accepte
-   ou non l'inscription.
+   Pour enregistrer un nouvel utilisateur, l'administrateur DOIT s'authentifier
 
 4.4.2 PDU
 
@@ -337,14 +257,6 @@ Bredariol & Poussard                                            [Page 5]
    le serveur confirme la reception du fichier
    serveur : "010 [fichier bien recue]
  
-
-
-Bredariol & Poussard                                            [Page 6]
-
-
-                  Service de Partage de Fichier (SPF)         13/01/2019
-
-
 4.5.3 Erreurs
 
    si l'utilisateur n'a plus assez de place pour l'envoie du fichier, le
@@ -370,20 +282,16 @@ Bredariol & Poussard                                            [Page 6]
    fichier
    client : "011 <nom du fichier> <utilisateur>"
 
-   si le serveur accepte il DOIT repondre au client
-   serveur : "012 [authorisation accepte]"
+   si le serveur effectue la requete, il DOIT repondre au client
+   serveur : "007 [authorisation accepte]"
 
 4.6.3 Erreurs
 
-   si le nom d'utilisateur est incorrecte, le serveur DOIT repondre 
-   serveur : "110 <nom d'utilisateur> [est incorrecte]"
+   si le nom d'utilisateur est incorrecte ou que le fichier
+   n'existe pas , le serveur DOIT repondre 
+   serveur : "202 <nom d'utilisateur> [est incorrecte]"
 
-   si le nom du fichier est incorrecte, le serveur DOIT repondre 
-   serveur : "111 <nom du fichier> [est incorrecte]"
 
-   si l'authorisation echoue pour une autre raison, le serveur DOIT
-   envoyer le message suivant
-   serveur : "112 [echec d'authorisation de droit de telechargement]"
 
 4.7 Enlever un utilisateurs de la liste des authorises a telecharger un
    fichier
@@ -393,15 +301,6 @@ Bredariol & Poussard                                            [Page 6]
    si une utiisateur souhaite qu'un autre utilisateur n'ai plus le droit
    de telecharger un fichier qui lui appartient, le client DOIT envoyer
    une requete pour specifier le fichier en question et l'utilisateur
- 
-
-
-Bredariol & Poussard                                            [Page 7]
-
-
-                  Service de Partage de Fichier (SPF)         13/01/2019
-
-
    concerne, suite a cela, le serveur DOIT repondre s'il accepte ou non
    la demande.
 
@@ -411,20 +310,21 @@ Bredariol & Poussard                                            [Page 7]
    utilisateurs authorises a telecharger son fichier
    client : "013 <nom du fichier> <utilisateur>"
 
-   si le serveur accepte il DOIT repondre au client
-   serveur : "014 [utilisateur enleve]"
+   si le serveur traite la requete il DOIT repondre au client
+   serveur : "007 [utilisateur enleve]"
 
 4.7.3 Erreurs
 
-   si le nom d'utilisateur est incorrecte, le serveur DOIT repondre
-   serveur : "110 <nom d'utilisateur> [est incorrecte]"
+   si le nom d'utilisateur est incorrecte,
+   le serveur DOIT repondre
+   serveur : "202 <nom d'utilisateur> [est incorrecte]"
 
    si le nom du fichier est incorrecte, le serveur DOIT repondre
-   serveur : "111 <nom du fichier> [est incorrecte]"
+   serveur : "202 <nom du fichier> [est incorrecte]"
 
    si l'authorisation echoue pour une autre raison, le serveur DOIT
    envoyer le message suivant
-   serveur : "113 [echec a l'interdiction d'un utilisateur de
+   serveur : "202 [echec a l'interdiction d'un utilisateur de
    telecharger un fichier]"
 
 4.8 Etat de l'espace de stockage
@@ -442,23 +342,13 @@ Bredariol & Poussard                                            [Page 7]
    client : "015 [Demande d'information de l'etat de l'espace]"
 
    le serveur DOIT repondre
-   serveur : "016 nb=<nombre de fichier televerses> quota=<quota
-   maximum> [nom=<nom du fichier> [utilisateurs=[utilisateur]...]..."
+   serveur : "007 <quota>:<nombre de fichiers>
 
 4.8.3 Erreurs
 
    Si le serveur ne peut pas repondre a la demande il DOIT envoyer le
    message d'erreur suivant
-   serveur : "114 [echec au listage de l'etat de stockage de
- 
-
-
-Bredariol & Poussard                                            [Page 8]
-
-
-                  Service de Partage de Fichier (SPF)         13/01/2019
-
-
+   serveur : "202 [echec au listage de l'etat de stockage de
    l'utilisateur]"
 
 4.9 Renommer un fichier televerse
@@ -475,18 +365,18 @@ Bredariol & Poussard                                            [Page 8]
    client : "017 <nom du fichier> <nouveau nom du fichier>"
 
    le serveur informe que le changement de nom a ete realise avec succes
-   serveur "018 [changement de nom reussie]"
+   serveur "007 [changement de nom reussie]"
 
 4.9.3 Erreurs
 
    si le nom du fichier est incorrecte, le serveur DOIT repondre 
-   Serveur : "111 <nom du fichier> [est incorrecte]"
+   Serveur : "202 <nom du fichier> [est incorrecte]"
 
    si le nouveau nom de fichier est incorrect le serveur DOIT repondre 
-   serveur : "115 [le nouveau nom de fichier est incorrect]"
+   serveur : "202 [le nouveau nom de fichier est incorrect]"
 
    si le changement de nom echoue le serveur DOIT repondre
-   serveur : "116 [echec a la modification du nom de fichier]"
+   serveur : "202 [echec a la modification du nom de fichier]"
 
 4.10 Supprimer un fichier
 
@@ -502,24 +392,15 @@ Bredariol & Poussard                                            [Page 8]
    client : "019 <nom du fichier>"
 
    si la suppression se deroule correctement le serveur DOIT repondre
-   serveur : "020 <nom du fichier> [a ete supprime]"
+   serveur : "007 <nom du fichier> [a ete supprime]"
 
 4.10.3 Erreurs
 
    Si le nom du fichier est incorrecte, le serveur DOIT repondre 
- 
-
-
-Bredariol & Poussard                                            [Page 9]
-
-
-                  Service de Partage de Fichier (SPF)         13/01/2019
-
-
-   Serveur : "111 <nom du fichier> [est incorrecte]"
+   Serveur : "202 <nom du fichier> [est incorrecte]"
 
    si le serveur n'arrive pas a supprimer le fichier il DOIT repondre
-   serveur : "117 [echec a la suppression du fichier]
+   serveur : "202 [echec a la suppression du fichier]
 
 4.11 Liste des fichiers des autres utilisateurs telechargeale depuis le
    compte
@@ -534,15 +415,16 @@ Bredariol & Poussard                                            [Page 9]
 4.11.2 PDU
 
    le client demande la liste des fichiers
-   client : "021 [liste des fichiers partages authorises]
+   client : "010 [liste des fichiers partages authorises]
 
    le serveur lui repond la liste
-   serveur "022 [<nom du fichier>]..."
+   serveur "007 [#<nom du fichier>:]...,[!<utilisateur qui
+   partage le fichier>?<fichier partage>:]..."
 
 4.11.3 Erreurs
 
    Si le requete ne peut aboutir le serveur DOIT repondre
-   serveur : "118 [echec a la reponde de liste de fichiers
+   serveur : "202 [echec a la reponde de liste de fichiers
    telechargeables partages]"
 
 4.12 Telecharger un fichier
@@ -564,22 +446,14 @@ Bredariol & Poussard                                            [Page 9]
 
    a la fin le serveur envoie le message
    serveur : "024 [transfert termine]"
- 
-
-
-Bredariol & Poussard                                           [Page 10]
-
-
-                  Service de Partage de Fichier (SPF)         13/01/2019
-
 
 4.12.3 Erreurs
 
    Si le nom du fichier est incorrecte, le serveur DOIT repondre
-   Serveur : "111 <nom du fichier> [est incorrecte]"
+   Serveur : "202 <nom du fichier> [est incorrecte]"
 
    si l'envoi du fichier echoue le serveur DOIT repondre
-   serveur : "119 [erreur pendant le transfert du fichier]
+   serveur : "202 [erreur pendant le transfert du fichier]
 
 4.13 Suppression de compte
 
@@ -595,15 +469,15 @@ Bredariol & Poussard                                           [Page 10]
    client : "025 <nom d'utilisateur>"
 
    le serveur repond que la requete est execute avec succes
-   serveur : "026 <nom d'utilisateur> [supprime]"
+   serveur : "007 <nom d'utilisateur> [supprime]"
 
 4.13.3 Erreurs
 
    si le nom d'utilisateur est incorrecte, le serveur DOIT repondre 
-   serveur : "110 <nom d'utilisateur> [est incorrecte]"
+   serveur : "202 <nom d'utilisateur> [est incorrecte]"
 
    si la requete ne peut aboutir le serveur DOIT repondre
-   serveur : "120 [suppression impossible]"
+   serveur : "202 [suppression impossible]"
 
 
 5 Examples d'echanges client serveur
@@ -622,14 +496,6 @@ Bredariol & Poussard                                           [Page 10]
    le serveur indique au client que l'authentification est reussie
    Serveur : "004 Authentification reussie"
  
-
-
-Bredariol & Poussard                                           [Page 11]
-
-
-                  Service de Partage de Fichier (SPF)         13/01/2019
-
-
    le client veux telechargr le fichier "toto.txt"
    Client  : "023 toto.txt"
 
@@ -653,32 +519,3 @@ Bredariol & Poussard                                           [Page 11]
 
    le serveur indique que la requete est correcte
    Serveur : "012 authorisation accepte"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Bredariol & Poussard                                           [Page 12]
