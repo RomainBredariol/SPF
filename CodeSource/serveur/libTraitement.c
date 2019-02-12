@@ -495,14 +495,33 @@ int delDroits(char *donnee) {
 int etat(char *donnee) {
 
 	char reponse[1000];		// reponse envoyé au client
-	int taille = placeDisponible();		// taille en kb
-	// espace disponible par defaut : 100Mo
-	// calculer la taille restante
-	printf("taille conso %d \n",taille);
-	taille = 100000-taille;
-	printf("taille dispo : %d \n",taille);
+	int taille = placeDisponible();		// taille en kb disponible
+	
+	// compter le nombre de fichier dans le dossier de l'utilisateurs
+	char cmd[MAX_PATH];	// commande a executer
+	memset(cmd,0,MAX_PATH);
 
+	// executer la commande pour obtenir la place en kb
+	sprintf(cmd,"ls -l depot/%s | wc -l > tmp",nomUser);
+	system(cmd);
 
+	
+	// ouvrir le fichier contenant le resultat de la commande
+	FILE *f = fopen("tmp","r");
+	
+	// recuperer le nb de fichiers
+	int nb;			// nombre de fichiers
+	fscanf(f,"%d",&nb);
+	nb = nb-2;		// corriger le nombre
+	
+	// supprimer le fichier temporaire
+	system("rm tmp");
+	
+	// forger la reponse
+	sprintf(reponse,"%d:%d\n",taille,nb);
+
+	// envoyer la reponse au client
+	Emission(reponse);
 	return 0;
 }
 
@@ -530,6 +549,7 @@ int placeDisponible() {
 	// supprimer le fichier temporaire
 	system("rm tmp");
 	
-	// renvoyer la taille en int
-	return taille;
+	// renvoyer la taille en kb disponible
+	// par defaut l'utilisateur à 100Mo de place disponible
+	return (100000-taille);
 }

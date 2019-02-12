@@ -129,7 +129,7 @@ int Emission(char *message) {
         perror("Emission, probleme lors du send.");
         return 0;
 	}
-	printf("Emission de %d caracteres.\n", taille+1);
+	//printf("Emission de %d caracteres.\n", taille+1);
 	return 1;
 }
 
@@ -176,7 +176,7 @@ int EmissionBinaire(char *donnees, size_t taille) {
 		perror("Emission, probleme lors du send.");
 		return -1;
 	} else {
-		printf("Emission de %lu caracteres.\n", taille+1);
+		//printf("Emission de %lu caracteres.\n", taille+1);
 		return retour;
 	}
 }

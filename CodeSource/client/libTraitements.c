@@ -149,9 +149,25 @@ int etat() {
 	// lecture de la réponse
 	char *rep;		// pointeur de chaine contenant la réponse du serveur
 	rep = Reception();
+
+        char taille[50];        // chaine de caractere contenant la taille en kb disponible
+        char nb[50];            // chaine de caractere contenant le nombre de fichiers
+        
+        memset(taille,0,50);
+        memset(nb,0,50);
+        
+        //prendre les bonne valeur dans la reponse
+        sscanf(rep,"%[^:]:%s",taille,nb);
+
+        // afficher correctement la reponse
+        printf("il vous reste ");
+        printf(VERT"%s kb "RESET,taille);
+        printf("disponible dans votre espace\n");
+        printf("vous avez ");
+        printf(BLEU"%s fichiers "RESET,nb);
+	printf("stockés dans votre space\n\n");
 	
-	// mise en forme de la réponse
-return 0;
+	return 0;
 }
 
 // auteur : Poussard Sébastien
