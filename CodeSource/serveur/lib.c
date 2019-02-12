@@ -325,6 +325,7 @@ int executerRequete(char * requete){
 			delDroits(donnee);
 			break;
 		case 15:
+			etat(donnee);
 			// demande de l'état de l'espace de stockage
 			break;
 		case 17:

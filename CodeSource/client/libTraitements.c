@@ -143,7 +143,15 @@ int autorisations() {
 // auteur : Poussard Sébastien
 // etat permet de d'afficher l'état de l'environnement (dossier) de l'utilisateur
 int etat() {
-	return 0;
+	// emission de la demande
+	Emission("15\n");
+
+	// lecture de la réponse
+	char *rep;		// pointeur de chaine contenant la réponse du serveur
+	rep = Reception();
+	
+	// mise en forme de la réponse
+return 0;
 }
 
 // auteur : Poussard Sébastien

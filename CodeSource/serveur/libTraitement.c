@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include "libTraitement.h"
+
 
 #define MAX_PATH 260
 
@@ -467,4 +469,49 @@ int delDroits(char *donnee) {
 	// envoyer un message pour pour indiquer le succés de la requete
 	Emission("007\n");
 	return 0;
+}
+
+// auteur : Poussard Sébastien
+// cette fonction retourne au client l'état de l'environnement de l'utilisateur (nombre de fichiers,
+// taille consommés, taille disponible ... 
+int etat(char *donnee) {
+
+	char reponse[1000];		// reponse envoyé au client
+	int taille = placeDisponible();		// taille en kb
+	// espace disponible par defaut : 100Mo
+	// calculer la taille restante
+	printf("taille conso %d \n",taille);
+	taille = 100000-taille;
+	printf("taille dispo : %d \n",taille);
+
+
+	return 0;
+}
+
+// auteur : Poussard Sébastien
+// cette fonction retourne la place disponible en kb dans l'environnement de l'utilisateur
+// pour le stockage de ses fichiers
+int placeDisponible() {
+
+	char cmd[MAX_PATH];	// commande a executer
+	memset(cmd,0,MAX_PATH);
+
+	// executer la commande pour obtenir la place en kb
+	sprintf(cmd,"du depot/%s | cut -c1 > tmp",nomUser);
+	system(cmd);
+
+	
+	// ouvrir le fichier contenant le resultat de la commande
+	FILE *f = fopen("tmp","r");
+	
+	// recuperer la chaine contenant la taille 
+	
+	int taille;
+	fscanf(f,"%d",&taille);
+	
+	// supprimer le fichier temporaire
+	system("rm tmp");
+	
+	// renvoyer la taille en int
+	return taille;
 }
