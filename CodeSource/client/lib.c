@@ -127,12 +127,16 @@ int authentification(){
 //affiche le menu en fonction du statut client (s'il est admin ou non)
 int afficher_menu(int user){
 	printf("========= Menu =========\n");
-	printf("1 - Televerser\n");
-	printf("2 - Telecharger\n");
-	printf("3 - Autorisation users\n");
-	printf("4 - Etat\n");
-	printf("5 - Gerer fichiers\n");
-	printf("6 - Liste fichiers telechargeable\n");
+
+	//si c'est un utilisateur normal
+	if(user == 4){
+		printf("1 - Televerser\n");
+		printf("2 - Telecharger\n");
+		printf("3 - Autorisation users\n");
+		printf("4 - Etat\n");
+		printf("5 - Gerer fichiers\n");
+		printf("6 - Liste fichiers telechargeable\n");
+	}
 
 	//Si l'utilisateur est l'admin
 	if(user == 5){
@@ -237,10 +241,9 @@ unsigned long longueur_fichier(char *nomFichier){
 // auteur : Bredariol Romain
 //lit le contenu d'un fichier et le renvoie 
 int lireContenuFichier(char *nomFichier, char *contenu, int taille){
-	/*      contenu est le contenu du fichier binaire à envoyer au client
-	 *                      taille est la longueur du fichier demande*/
-	FILE *fichier = fopen(nomFichier, "r");
+
 	//ouvre le fichier demande
+	FILE *fichier = fopen(nomFichier, "r");
 	if(fichier == NULL){
 		printf("Erreur ouverture fichier : %s\n", nomFichier);
 		return -1;
@@ -257,12 +260,15 @@ int lireContenuFichier(char *nomFichier, char *contenu, int taille){
 // auteur : Bredariol Romain
 //permet d'ecrire dans un fichier
 int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
+
+	//ouvre le fichier demande
 	FILE *fichier = fopen(nomFichier, "w");
 	if(fichier == NULL){
 		printf("Erreur fopen %s\n", nomFichier);
 		return -1;
 	}
 
+	//ecrit le contenu dans le fichier et verifie qu'il n'y ai pas d'erreur
 	int ecode = fwrite(contenu, 1, size, fichier); 
 	if(ecode == 0){
 		printf("Erreur ecriture de donnee dans %s\n", nomFichier);

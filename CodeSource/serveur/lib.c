@@ -24,16 +24,18 @@ struct user su = {"ad", "ad"};
 // auteur : Bredariol Romain
 //edition du super utilisateur
 int editSu(char *donnee){
-	char login[100], mdp[100];
+	char login[100], mdp[100]; //contient le nouveau login et nouveau mdp 
 
 	memset(login, 0, 100);
 	memset(mdp, 0, 100);
 
+	//on recupere les nouveaux login et mdp
 	sscanf(donnee, "%s %s", login, mdp);
 
 	strcpy(su.login, login);
 	strcpy(su.mdp, mdp);
 
+	//on emet une reponse positive au client
 	Emission("007 Les modifications ont bien ete prises en compte\n");
 	return 0;
 }
@@ -58,7 +60,7 @@ int is_user(char * login_mdp){
 			strcpy(nomUser, su.login);
 			return 5;
 		}else{
-			printf("Mauvais mdp\n");
+			//Mauvais mdp
 			return 0;
 		}
 	}else{
@@ -69,8 +71,10 @@ int is_user(char * login_mdp){
 			return -1;
 		}
 
+		//tant qu'il y a une ligne dans le fichier de log
 		while(fscanf(user_list, "%s %s",login_test, mdp_test) != EOF){ 
 
+			//on verifie que l'utilisateur existe
 			if(strcmp(login_test, login)==0){
 				if(strcmp(mdp_test, mdp)==0){
 					//confirme qu'un utilisateur est identifie
@@ -149,25 +153,30 @@ int lancerServeur() {
 // auteur : Bredariol Romain
 //Demande l'authentification au client
 int authentification(){
-	char * user;
-	//l'ecode est un code d'erreur
-	int ecode;
+	char * user; 	//contient le login et mdp
+	int ecode;	//l'ecode est un code d'erreur
+	
+	//recoit les donnees de connexion
 	user = Reception();
 
 	//decoupe le message recu 
 	sscanf(user, "003 %[^\n]", user);
+
 	//verifie que l'utilisateur existe
 	ecode = is_user(user);
+
 	//si c'est un utilisateur lambda
 	if(ecode == 4){
 		Emission("004 auth OK\n");
 		return 1;
 	}
+
 	//si c'est le super utilisateur
 	if(ecode == 5){
 		Emission("005 auth su OK\n");
 		return 1;
 	}
+
 	// si login ou mdp ne sont pas bon renvoyer le code pour echec d'authentification
 	Emission("104 login et/ou mot de passe incorrect\n");
 
@@ -177,7 +186,8 @@ int authentification(){
 // auteur : Bredariol Romain
 //extraitNomFichier permet de d'extraire le nom d'un fichier d'un chemin absolue
 char* extraitNomFichier(char *fileName){
-	char *ptr;
+	char *ptr;	//pointe la chaine qui contient le nom du fichier
+
 	while((ptr = strstr(fileName, "/"))){
 		ptr = &ptr[1];
 		strcpy(fileName, ptr);

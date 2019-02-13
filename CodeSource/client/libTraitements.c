@@ -22,29 +22,40 @@
 // auteur : Bredariol Romain
 // televerser permet d'envoyer un fichier sur le serveur
 int televerser() {
-	char *fileName, *donnee;
-	int size;
+	char *fileName, *donnee; //fileName est le nom du fichier, donnee sera envoye au serveur
+	int size;		 //size est la taille du fichier a televerser	
+
+	//allocation dynamique des variables
 	fileName = malloc(MAX_PATH);
 	donnee = malloc(MAX_PATH+20);
 
+	//lecture du nom du fichier
 	printf("Veuillez entrer le nom du fichier a televerser sur le serveur\n");
 	printf("nom du fichier : ");
 	lire(fileName, MAX_PATH);
 
+	//ouverture du fichier a televerser
 	FILE * file = fopen(fileName, "r");
 	if(file == NULL){
 		printf("Erreur fopen %s\n", fileName);
 		return -1;
 	}
+
+	//recuperation de sa taille pour l'emission binaire
 	size = longueur_fichier(fileName);		
 
+	//envoie l'entete au serveur
 	sprintf(donnee, "008 %s %i\n",fileName, size); 
 	Emission(donnee);
 
+	//on alloue dynamiquement donnee avec size pour qu'il contienne le contenu du fichier
 	free(donnee);
 	donnee = malloc(size);
+
+	//va lire le contenu du fichier et le stocker dans donnee
 	lireContenuFichier(fileName, donnee, size);
 
+	//on emet les donnees et on lit la reponse du serveur
 	EmissionBinaire(donnee, size);
 	lireReponse();
 
@@ -57,10 +68,16 @@ int televerser() {
 // auteur : Bredariol Romain
 // telecharger permet de télécharger un fichier depuis le serveur
 int telecharger() {
-	char *fichier = malloc(MAX_PATH), *requete, *entete = malloc(MAX_PATH), *contenu;
-	char nomFichier[100];
-	int taille;
+	char *fichier = malloc(MAX_PATH), // fichier est le fichier a telecharger
+	*requete,                         // requete va etre la requete pour demander au serveru de telecharger un fichier
+	*entete = malloc(MAX_PATH),       // entete sera l'entete qu'on va recevoir du serveur
+	*contenu;                         // contenu sera le contenu du fichier a telecharger
+		
+	char nomFichier[100];             // contient le nom du ficheir
+	//,chemin[MAX_PATH];                 // chemin ou va ecrire le fichier
+	int taille;                       // contient la taille du fichier
 
+	//va afficher la liste des fichiers telechargeables
 	system("clear");
 	listeFichiers();	
 
@@ -71,20 +88,22 @@ int telecharger() {
 	//on recupere le nom du fichier
 	lire(fichier, MAX_PATH);
 
+	//on envoie le nom du fichier a telecharger
 	requete = malloc(MAX_PATH+20);	
 	sprintf(requete, "023 %s\n", fichier);
-	
-	//on envoie le nom du fichier a telecharger
 	Emission(requete);
 
 	//on recoit le nom du fichier et sa taille 
 	entete = Reception();	
 	sscanf(entete, "200 %s %i\n", nomFichier, &taille);
 
+	//alloue dynamiquement contenu pour qu'il contienne le contenu du fichier
 	contenu = malloc(taille);
-
 	ReceptionBinaire(contenu, taille);
 
+	//demander le chemin 
+
+	//ecrit le fichier
 	ecrireContenuFichier(nomFichier, contenu, taille);
 
 	free(fichier);
@@ -218,20 +237,24 @@ int gererFichiers() {
 // auteur : Poussard Sébastien
 // listeFichiers permet de lister les fichiers telechargeable (ceux de l'utilisateur et ceux partagés)
 int listeFichiers() {
+	char *rep;		// pointeur de chaine contenant la réponse du serveur
 
 	// envoi du code pour obtenir les infos sur les fichiers telechargeable au serveur
 	Emission("10 \n");
+
 	//recevoir les données
-	char *rep;		// pointeur de chaine contenant la réponse du serveur
 	rep = Reception();
+
 	// afficher proprement la réponse obtenue
 	printf("\n\nLISTE DES FICHIERS TELECHARGEABLES\n\nvos fichiers en ");
+
 	// indiquer a l'utilisateur le code couleur utilisé
 	printf(BLEU"bleu"RESET);
 	printf(" les fichiers partagés en ");
 	printf(VERT"vert"RESET);
 	printf(" par d'autres ");
 	printf(JAUNE"utilisateurs\n\n\n"RESET);
+
 	// lire chaque caractere de la reponse
 	for (int i = 0 ; i < strlen(rep); i++ ) {
 		// si c'est un ":" soter une ligne
@@ -319,7 +342,7 @@ int gestionComptes() {
 int addUser(){
 	char login[100];	// chaine utilisé pour le login
 	char mdp[100];		// chaine utilisé pour le mot de passe
-	char donnee[300];
+	char donnee[300];	// chaine contenant login et mdp
 
 	memset(login, 0, 100);
 	memset(mdp, 0, 100);
@@ -329,8 +352,10 @@ int addUser(){
 	printf("Veuillez saisir le login et mdp de l'utilisateur a ajouter\n");
 	lecture_login_mdp(login, mdp);
 
+	//formatage de la chaine
 	sprintf(donnee,"6 %s %s\n", login, mdp);
 
+	//demande au serveur de creer un utilisateur et lis sa reponse 
 	Emission(donnee);
 	lireReponse();
 	return 0;
@@ -341,7 +366,7 @@ int addUser(){
 int delUser(){
 	char login[100];	// chaine utilisé pour le login
 	char mdp[100];		// chaine utilisé pour le mot de passe
-	char donnee[300];
+	char donnee[300];	// chaine contenant login et mdp
 
 	memset(login, 0, 100);
 	memset(mdp, 0, 100);
@@ -352,8 +377,10 @@ int delUser(){
 	printf("Veuillez saisir le login et le password l'utilisateur a supprimer\n");
 	lecture_login_mdp(login, mdp);
 	
+	//formatage de la chaine
 	sprintf(donnee,"25 %s %s\n", login, mdp);
 
+	//demande au serveur de supprimer un utilisateur et lis sa reponse 
 	Emission(donnee);
 	lireReponse();
 	return 0;
@@ -395,7 +422,7 @@ int lecture_login_mdp(char *login, char *mdp){
 int editSu(){
 	char login[100];	// chaine utilisé pour le login
 	char mdp[100];		// chaine utilisé pour le mot de passe
-	char donnee[300];
+	char donnee[300];	// chaine contenant login et mdp
 	
 	memset(login, 0, 100);
 	memset(mdp, 0, 100);
@@ -405,8 +432,10 @@ int editSu(){
 	printf("Veuillez saisir votre nouveau login et nouveau mdp\n");
 	lecture_login_mdp(login, mdp);
 
+	//formatage de la chaine
 	sprintf(donnee,"27 %s %s\n", login, mdp);
 
+	//demande au serveur d'editer le super-utilisateur et lis sa reponse 
 	Emission(donnee);
 	lireReponse();
 	return 0;

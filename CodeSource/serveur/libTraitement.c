@@ -103,17 +103,20 @@ int addUser(char *donnee){
 	}
 	
 	fclose(user_list);
+
 	// auteur :  Poussard Sébastien
 	//créer le dossier d'utilisateur et le fihier autorisations
 	// forger le nom de dossier
 	sscanf(donnee,"%[^ ]",user);
 	strcpy(addresseDossierUser,"depot/");
 	strcat(addresseDossierUser,user);
+
 	// creer le dossier de l'utilisateur
 	if (mkdir(addresseDossierUser,0777) == 0) {	
 		printf("création du dossier d'utilisateur\n");
-	strcat(addresseDossierUser,"/autorisations");
+		strcat(addresseDossierUser,"/autorisations");
 	}	
+
 	// creer le fichier d'autorisations de l'utilisateur
 	if (fopen(addresseDossierUser,"w") != NULL) {
 			printf("création du fichier d'autorisations de l'utilisateur\n");
@@ -126,8 +129,9 @@ int addUser(char *donnee){
 // auteur : Romain Bredariol
 //un client veut televerser un fichier 
 int televerser(char *donnee){
-	char *fileName, *contenu;
-	int size;
+	char *fileName,	//contient le nom du fichier 
+	     *contenu;	//contient le contenu du fichier
+	int size;	//la taille du fichier
 
 	fileName = malloc(MAX_PATH);
 
@@ -153,33 +157,39 @@ int televerser(char *donnee){
 // auteur : Bredariol Romain
 //permet d'envoyer un fichier a utilisateur
 int telecharger(char *donnee){
-	char *path = malloc(MAX_PATH), *contenu = malloc(MAX_PATH);
-	int size;
+	char *path = malloc(MAX_PATH),		//contient le chemin pour acceder au fichier 
+	     *contenu = malloc(MAX_PATH);	//le contenu du fichier
+	int size;				//la taille du fichier
 
+	//si le fichirt a telecharger appartient a l'utilisateur ou s'il est partage
 	if(strstr(donnee, "/") == NULL){
 		sprintf(path, "depot/%s/%s", nomUser, donnee);
 	}else{
 		sprintf(path, "depot/%s", donnee);
 	}
 
+	//ouverture du fichier a envoyer
 	FILE *fichier = fopen(path, "r");
 	if(fichier == NULL){
 		printf("Erreur fopen du fichier %s\n", path);
 		return -1;
 	}
 
+	//recuperation de la taille du fichier
 	size = longueur_fichier(path);
 
+	//on extrait le nom du fichier
 	strcpy(donnee, path);
 	extraitNomFichier(donnee);
 
+	//on envoie l'entete 
 	sprintf(contenu, "200 %s %i\n",donnee, size);
 	Emission(contenu);
 	free(contenu);
 
+	//on lit le contenu et on l'envoie au client 
 	contenu = malloc(size);
 	lireContenuFichier(path, contenu, size);
-
 	EmissionBinaire(contenu, size);
 	return 0;
 }
@@ -196,9 +206,11 @@ int lister(){
 
 	memset(reponse,0,1000);
 	memset(cheminUser,0,50);
+
 	// forger le chemin
 	strcpy(cheminUser,"depot/");
 	strcat(cheminUser,nomUser);
+
 	// ouvrir le dossier
      	d = opendir(cheminUser);
      	if (d) {
@@ -220,6 +232,7 @@ int lister(){
 	// lister les fichiers partagés à l'utilisateur
 	// forger le nouveau chemin pour acceder au fichier d'autorisations
 	strcat(cheminUser,"/autorisations");
+
 	// l'ouvrir
 	FILE *f = fopen(cheminUser,"r");
 	char partageur[50];		//chaine contenant la personne qui partage un fichier avec l'utilisateur
@@ -233,13 +246,17 @@ int lister(){
 		// ajouter a la reponse le marquer "?" : indique que la suite est le nom 
 		// de l'utilisateur qui partage du contenu avec l'utilisateur
 		strcat(reponse,"?");
+
 		// ajouter a la reponse le nom de l'utilisateur qui partage 
 		strcat(reponse,partageur);
+
 		// ajouter a la reponse le marquer "!" : indique que la suite est le nom
 		// du fichier qui est partagé avec l'utilisateur 
 		strcat(reponse,"!");
+
 		// ajouter a la reponse le nom du fichier
 		strcat(reponse,fichierPartage);
+
 		// ajouter a la reponse le marqueur ":" : indique la fin d'un fichier partagé
 		strcat(reponse,":");
 	}
@@ -256,23 +273,25 @@ int lister(){
 // fonction qui supprimer un fichier du serveur
 int supprimerFichier(char *donnee) {
 	char command[50];		// chaine qui contient la commande qui sera executer sur le serveur
-
 	memset(command,0,50);
+
 	// forger la commande de suppression du fichier
 	strcpy(command,"rm depot/");
 	strcat(command,nomUser);
 	strcat(command,"/");
 	strcat(command,donnee);
+
 	//verifier que le fichier existe
 	DIR *d;			// pointeur vers un dossier
      	struct dirent *dir;	// structure dirent
 	char cheminUser[50];	// chemin d'acces
 	int ok = 0;		// ok 0 si le fichier n'existe pas 1 si le fichier à été trouvé
 
-	memset(cheminUser,0,50);
 	// forger le chemin d'acces au fichiers
+	memset(cheminUser,0,50);
 	strcpy(cheminUser,"depot/");
 	strcat(cheminUser,nomUser);
+
 	// ouvrir le dossier 
      	d = opendir(cheminUser);
      	if (d) {
@@ -328,8 +347,8 @@ int renommerFichier(char *donnee) {
 	char cheminUser[50];		// chemin d'acces
 	int ok = 0;			// ok 0 si le fichier n'existe pas 1 si le fichier à été trouvé
 		
-	memset(cheminUser,0,50);
 	// forger le chemin
+	memset(cheminUser,0,50);
 	strcpy(cheminUser,"depot/");
 	strcat(cheminUser,nomUser);
      	d = opendir(cheminUser);
@@ -370,14 +389,16 @@ int addDroits(char *donnee) {
 	// séparer utilisateur et nom de fichier de la requete
 	sscanf(donnee,"%[^ ] %[^ ]",fichier,utilisateur);
 
-	//verifier que le fichier existe
-	DIR *d;			// pointeur vers un dossier
-     	struct dirent *dir;	// structure dirent
-	char cheminUser[50];	// chemin d'accés
-	int ok = 0;		// ok 0 si le fichier n'existe pas 1 si le fichier à été trouvé
+	// verifier que le fichier existe
+	DIR *d;                    // pointeur vers un dossier
+	struct dirent *dir;        // structure dirent
+	char cheminUser[MAX_PATH]; // chemin d'accés
+	char cheminAuto[MAX_PATH]; // chemin d'accés
+	int ok = 0;                // ok 0 si le fichier n'existe pas 1 si le fichier à été trouvé
 	
-	memset(cheminUser,0,50);
 	// forger la chemin
+	memset(cheminUser,0,MAX_PATH);
+	memset(cheminAuto,0,MAX_PATH);
 	strcpy(cheminUser,"depot/");
 	strcat(cheminUser,nomUser);
 	// ouvrir le dossier
@@ -401,7 +422,7 @@ int addDroits(char *donnee) {
 		return 1;
 	}
 	// verifier si l'utilisateur à autoriser existe (si son dossier existe)
-	memset(cheminUser,0,50);
+	memset(cheminUser,0,MAX_PATH);
 	// forger le nouveau chemin
 	sprintf(cheminUser,"depot/%s",utilisateur);
 	if (opendir(cheminUser) == NULL) {
@@ -409,15 +430,28 @@ int addDroits(char *donnee) {
 		Emission("202\n");
 		return 1;
 	}
+
 	// autoriser l'utilisateur
 	// ouvrir le fichier
 	strcat(cheminUser,"/autorisations");
-	FILE *f = fopen(cheminUser,"a");
+	FILE *f = fopen(cheminUser,"a+");
+
 	// ecrire dans le fichier
-	memset(cheminUser,0,50);
-	sprintf(cheminUser,"%s/%s\n",nomUser,fichier);
+	memset(cheminUser,0,MAX_PATH);
+
+	sprintf(cheminUser,"%s/%s",nomUser,fichier);
+
+	while(fscanf(f, "%s", cheminAuto) != EOF){
+		if((strcmp(cheminUser, cheminAuto)) == 0){
+			Emission("202 l'autorisation a ce fichier existe deja\n");
+			return 0;
+		}
+	}
+	
+	strcat(cheminUser, "\n");
 	fputs(cheminUser,f);
 	fclose(f);
+
 	// envoyer un message pour indiquer au client le succés de la requete
 	Emission("007\n");
 	return 0;
@@ -435,13 +469,15 @@ int delDroits(char *donnee) {
 
 	memset(utilisateur,0,50);
 	memset(fichier,0,50);
+	memset(chemin,0,MAX_PATH);
+	memset(chemin_tmp,0,MAX_PATH);
+	memset(fileAuto,0,MAX_PATH);
 
 	// séparer utilisateur et nom de fichier de la requete
 	sscanf(donnee,"%[^ ] %[^ ]",utilisateur,fichier);
 
 	// verifier que l'utilisateur existe sinon envoyer un message d'erreur
 
-	memset(chemin,0,50);
 	// forger le chemin
 	sprintf(chemin,"depot/%s",utilisateur);
 	// si le dossier ne peut pas être ouvert, envoyer un message d'erreur au client
@@ -462,26 +498,33 @@ int delDroits(char *donnee) {
 
 	// creation d'un nouveau fichier
 	sprintf(chemin_tmp, "%s.tmp", chemin);
-	FILE *f_tmp = fopen(chemin,"w");
+	FILE *f_tmp = fopen(chemin_tmp,"w");
 	if (f_tmp == NULL) {
 		Emission("202\n");
 		return 1;
 	}
 
+	//on formate les donnees a tester
 	memset(donnee, 0, strlen(donnee));
-	
-	sprintf(donnee, "%s/%s", utilisateur, fichier);
+	sprintf(donnee, "%s/%s", nomUser, fichier);
 
-	while(fscanf(f, "%s", fileAuto) != EOF){
-		if(strcmp(fileAuto, donnee)==0){
-			ecode = fwrite(fileAuto, 1, strlen(fileAuto), f_tmp); 
-			if(ecode == 0){
+	//tant qu'il reste une ligne dans le fichier autorisation
+	while(fscanf(f, "%s\n", fileAuto) != EOF){
+		if((strcmp(fileAuto, donnee)) != 0){
+			//si on trouve une ligne différente on l'ajoute au fichier temporaire 
+			strcat(fileAuto, "\n");
+			ecode = fputs(fileAuto, f_tmp);
+			if(ecode == EOF){
 				printf("Erreur ecriture de donnee dans autorisation.tmp\n");
 				return -1;
 			}
 		}
 	}
 
+	fclose(f);
+	fclose(f_tmp);
+
+	//on renomme le fichier tmp
 	rename(chemin_tmp, chemin);
 
 	// envoyer un message pour pour indiquer le succés de la requete

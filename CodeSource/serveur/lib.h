@@ -45,3 +45,7 @@ int supprimerFichierListe(char* userName);
 // utilisé la fonction adéquat
 int executerRequete(char * requete);
 
+// auteur : Bredariol Romain
+//on ecrit le nom du fichier et le nom de l'utilisateur a qui il appartient 
+//dans le fichier liste qui recense l'ensemble des fichiers du serveur
+int ajouterFichierAuto(char* nomFichier);
