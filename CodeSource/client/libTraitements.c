@@ -73,9 +73,11 @@ int telecharger() {
 	*entete = malloc(MAX_PATH),       // entete sera l'entete qu'on va recevoir du serveur
 	*contenu;                         // contenu sera le contenu du fichier a telecharger
 		
-	char nomFichier[100];             // contient le nom du ficheir
-	//,chemin[MAX_PATH];                 // chemin ou va ecrire le fichier
+	char nomFichier[100],             // contient le nom du ficheir
+	chemin[MAX_PATH];                 // chemin ou va ecrire le fichier
 	int taille;                       // contient la taille du fichier
+
+	memset(chemin, 0, MAX_PATH);
 
 	//va afficher la liste des fichiers telechargeables
 	system("clear");
@@ -102,9 +104,14 @@ int telecharger() {
 	ReceptionBinaire(contenu, taille);
 
 	//demander le chemin 
+	printf("\nVeuillez entrer le chemin pour deposer le fichier telecharger (Tapez ENTREE pour selectionner le repertoire courant):\n");
+	lire(chemin, MAX_PATH);
 
+	if(strcmp(chemin, "") == 0){
+		strcpy(chemin, nomFichier);
+	}
 	//ecrit le fichier
-	ecrireContenuFichier(nomFichier, contenu, taille);
+	ecrireContenuFichier(chemin, contenu, taille);
 
 	free(fichier);
 	free(requete);

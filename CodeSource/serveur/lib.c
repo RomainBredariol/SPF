@@ -204,12 +204,14 @@ int ecrireContenuFichier(char *nomFichier, char *contenu, int size){
 	FILE *fichier = fopen(path, "w");
 	if(fichier == NULL){
 		printf("Erreur fopen %s\n", nomFichier);
+		Emission("202\n");
 		return -1;
 	}
 
 	int ecode = fwrite(contenu, 1, size, fichier); 
         if(ecode == 0){
         	printf("Erreur ecriture de donnee dans %s\n", nomFichier);
+		Emission("202\n");
         	return -1;
 	}
 	fclose(fichier);
@@ -229,12 +231,14 @@ int supprimerFichierListe(char* userName){
 	FILE * fichier = fopen("depot/liste", "r");
 	if(fichier == NULL){
 		printf("Erreur fopen liste\n");
+		Emission("202\n");
 		return -1;
 	}
 
 	FILE * fichierTmp = fopen("depot/liste.tmp", "w");
 	if(fichierTmp == NULL){
 		printf("Erreur fopen liste tmp\n");
+		Emission("202\n");
 		return -1;
 	}
 
@@ -244,6 +248,7 @@ int supprimerFichierListe(char* userName){
 			ecode = fwrite(fichier_nom, 1, strlen(fichier_nom), fichierTmp); 
 			if(ecode == 0){
 				printf("Erreur ecriture de donnee dans liste Tmp\n");
+				Emission("202\n");
 				return -1;
 			}
 		}
@@ -268,6 +273,7 @@ int ajouterFichierListe(char* nomFichier){
 	FILE * fichier = fopen("depot/liste", "a+");
 	if(fichier == NULL){
 		printf("Erreur fopen liste\n");
+		Emission("202\n");
 		return -1;
 	}
 
@@ -284,6 +290,7 @@ int ajouterFichierListe(char* nomFichier){
 	ecode = fwrite(contenu, 1, strlen(contenu), fichier); 
 	if(ecode == 0){
 		printf("Erreur ecriture de donnee dans liste\n");
+		Emission("202\n");
 		return -1;
 	}
 
@@ -370,6 +377,7 @@ int lireContenuFichier(char *nomFichier, char *contenu, int taille){
 	//ouvre le fichier demande
 	if(fichier == NULL){
 		printf("Erreur ouverture fichier : %s\n", nomFichier);
+		Emission("202\n");
 		return -1;
 	}
 
